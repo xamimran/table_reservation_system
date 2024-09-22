@@ -1,0 +1,1 @@
+http://127.0.0.1:8000/table/check_availability/?table_id=1&reservation_date=22-09-24&slot_time_id=1
