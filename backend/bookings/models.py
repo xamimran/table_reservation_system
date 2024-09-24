@@ -14,7 +14,7 @@ class MealSlotTime(models.Model):
     end_time = models.TimeField()
 
 class Table(models.Model):
-    table_number = models.IntegerField()
+    table_number = models.IntegerField(unique=True)
     is_available = models.BooleanField(default=True)
     slot_time_id = models.ForeignKey(MealSlotTime, on_delete=models.CASCADE)
     adults = models.IntegerField()
