@@ -33,16 +33,10 @@ class TableView(viewsets.ModelViewSet):
             reservation_date = datetime.strptime(date, '%d-%m-%y').date()
         except ValueError:
             return Response({"message": "Invalid date format. Use 'dd-mm-yy'."}, status=400)
-        reserved_tables = Reservation.objects.filter(
-            reservation_date = reservation_date,
-            slot_time_id = slot_time_id
-        ).values_list('table_id', flat=True)
-        available_table = Table.objects.filter(
-            adults = adults,
-            children = children
-        ).exclude(
-            id__in = reserved_tables
-        ).values_list('id', flat=True).first()
+        reserved_tables = Reservation.objects.filter( reservation_date = reservation_date, slot_time_id = slot_time_id).values_list('table_id', flat=True)
+
+        available_table = Table.objects.filter(adults__gte = adults,children__gte = children).exclude(id__in = reserved_tables ).values_list('id', flat=True).first()
+
         if available_table is not None:
             return Response({"available_table": available_table})
         else:
