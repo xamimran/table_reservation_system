@@ -124,3 +124,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'bookings.UserProfile'
+# settings.py
+STRIPE_SECRET_KEY = 'sk_test_51Q2M6V1omZnM38gMsZk99Honzma9auS03RUqREwT6TogmTxpvt4z775gq0O5W5iELBMRKbsZy2NqlwpLBqxBy95400erIKABkI'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51Q2M6V1omZnM38gMl9s0JnnbyqYKIlNyxNMvFSQp0toPHMUQMiFHDbIcAthMVLgQktbfeOzkRvUL67RZMODHx3Qq00rUbEo8f3'

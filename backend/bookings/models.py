@@ -5,8 +5,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class UserProfile(AbstractUser):
-    f_name = models.CharField(max_length=50)
-    l_name = models.CharField(max_length=50)
     phone = models.CharField(max_length=12)
     user_notes = models.TextField()
 
@@ -30,10 +28,10 @@ class Reservation(models.Model):
     slot_time_id = models.ForeignKey(MealSlotTime, on_delete=models.CASCADE, default=0)
 
 class Payment(models.Model):
-    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     reservation_id = models.ForeignKey(Reservation, on_delete=models.CASCADE)
     description = models.CharField(max_length=50) # Fix here
     table_id = models.ForeignKey(Table, on_delete=models.CASCADE)
     stripe_payment_id = models.IntegerField()
     amount = models.IntegerField()
-    payment_date = models.DateField()
+    payment_date = models.DateField(auto_now_add=True)
