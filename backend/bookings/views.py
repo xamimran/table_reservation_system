@@ -25,24 +25,26 @@ class TableView(viewsets.ModelViewSet):
     def check_availability(self, request):
         date = request.query_params.get('reservation_date')
         slot_time_id = request.query_params.get('slot_time_id')
-
+        adults = int(request.query_params.get('adults'))
+        children = int(request.query_params.get('children'))
         if not date or not slot_time_id:
             return Response({"message": "Date and slot time are required."}, status=400)
         try:
             reservation_date = datetime.strptime(date, '%d-%m-%y').date()
         except ValueError:
             return Response({"message": "Invalid date format. Use 'dd-mm-yy'."}, status=400)
-
         reserved_tables = Reservation.objects.filter(
             reservation_date = reservation_date,
             slot_time_id = slot_time_id
         ).values_list('table_id', flat=True)
-
-        available_tables = Table.objects.exclude(
+        available_table = Table.objects.filter(
+            adults = adults,
+            children = children
+        ).exclude(
             id__in = reserved_tables
-        ).values_list('id', flat=True)
-        if available_tables.exists():
-            return Response({"available_tables": list(available_tables)})
+        ).values_list('id', flat=True).first()
+        if available_table is not None:
+            return Response({"available_table": available_table})
         else:
             return Response({"message": "No tables available."})
 
