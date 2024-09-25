@@ -5,7 +5,7 @@ from .models import UserProfile, MealSlotTime, Table, Reservation, Payment
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['first_name', 'last_name', 'email','phone', 'user_notes']
+        fields = ['id','username','first_name', 'last_name', 'email','phone', 'user_notes']
 
 class MealSlotTimeSerializer(serializers.ModelSerializer):
     class Meta:
