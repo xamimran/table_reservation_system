@@ -4,6 +4,7 @@ import { User, Mail, Phone } from "lucide-react";
 
 interface CustomerDetailsStepProps {
   customerDetails: {
+    user_name: string;
     first_name: string;
     last_name: string;
     email: string;
@@ -11,6 +12,7 @@ interface CustomerDetailsStepProps {
     user_notes: string;
   };
   setCustomerDetails: (details: {
+    user_name: string;
     first_name: string;
     last_name: string;
     email: string;
@@ -24,6 +26,7 @@ export default function CustomerDetailsStep({
   setCustomerDetails,
 }: CustomerDetailsStepProps) {
   const details = customerDetails || {
+    user_name: "",
     first_name: "",
     last_name: "",
     user_notes: "",
@@ -32,7 +35,7 @@ export default function CustomerDetailsStep({
   };
 
   return (
-    <div className="space-y-6  h-[500px]">
+    <div className="space-y-6  h-[600px]">
       <h2 className="text-2xl font-bold mb-4">Customer Details</h2>
       <div className="space-y-4">
         <div className="space-y-2">
@@ -85,6 +88,25 @@ export default function CustomerDetailsStep({
             value={details.email}
             onChange={(e) =>
               setCustomerDetails({ ...details, email: e.target.value })
+            }
+            required
+            className="text-lg p-3"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label
+            htmlFor="user_name"
+            className="text-lg font-medium flex items-center space-x-2"
+          >
+            <Mail className="w-5 h-5" />
+            <span>User Name</span>
+          </Label>
+          <Input
+            id="user_name"
+            type="user_name"
+            value={details.user_name}
+            onChange={(e) =>
+              setCustomerDetails({ ...details, user_name: e.target.value })
             }
             required
             className="text-lg p-3"

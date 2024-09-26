@@ -26,6 +26,7 @@ export default function ReservationForm() {
   const [isTableAvailable, setIsTableAvailable] = useState(false);
   const [tableData, setTableData] = useState();
   const [customerDetails, setCustomerDetails] = useState({
+    user_name: "",
     first_name: "",
     last_name: "",
     email: "",

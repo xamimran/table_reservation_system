@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'bookings'
+    'bookings',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'table_reservation_system.urls'
 
@@ -127,3 +130,5 @@ AUTH_USER_MODEL = 'bookings.UserProfile'
 # settings.py
 STRIPE_SECRET_KEY = 'sk_test_51Q2M6V1omZnM38gMsZk99Honzma9auS03RUqREwT6TogmTxpvt4z775gq0O5W5iELBMRKbsZy2NqlwpLBqxBy95400erIKABkI'
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51Q2M6V1omZnM38gMl9s0JnnbyqYKIlNyxNMvFSQp0toPHMUQMiFHDbIcAthMVLgQktbfeOzkRvUL67RZMODHx3Qq00rUbEo8f3'
+
+CORS_ALLOW_ALL_ORIGINS = True
