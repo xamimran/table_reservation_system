@@ -36,9 +36,10 @@ class Reservation(models.Model):
     reservation_date = models.DateField()
     payment_status = models.BooleanField(default=False)
     slot_time_id = models.ForeignKey(MealSlotTime, on_delete=models.CASCADE, default=0)
+    no_show = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return f"Reservation for {self.user_id} on {self.reservation_date}"
+        return f"Reservation for {self.user_id.first_name.capitalize() } {self.user_id.last_name.capitalize()} on {self.reservation_date}"
     
 class PaymentStaus(models.TextChoices):
     PENDING = 'P', 'Pending'

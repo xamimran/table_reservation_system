@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.db.models import F, Value, IntegerField
 from rest_framework import viewsets
+from django.db.models.functions import Greatest
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from datetime import datetime
@@ -35,7 +37,15 @@ class TableView(viewsets.ModelViewSet):
             return Response({"message": "Invalid date format. Use 'dd-mm-yy'."}, status=400)
         reserved_tables = Reservation.objects.filter( reservation_date = reservation_date, slot_time_id = slot_time_id).values_list('table_id', flat=True)
 
-        available_table = Table.objects.filter(adults__gte = adults,children__gte = children).exclude(id__in = reserved_tables ).values_list('id', flat=True).first()
+        available_table = Table.objects.filter(
+        adults__gte=adults,
+        children__gte=children
+        ).exclude(id__in=reserved_tables).annotate(
+            # Calculate surplus for adults and children
+            adult_surplus=F('adults') - Value(adults, output_field=IntegerField()),
+            child_surplus=F('children') - Value(children, output_field=IntegerField()),
+            # Use Greatest to sort by the largest surplus between adults and children
+            total_surplus=Greatest(F('adults') - adults, F('children') - children)).order_by('total_surplus').values_list('table_number', flat=True).first()
 
         if available_table is not None:
             return Response({"available_table": available_table})

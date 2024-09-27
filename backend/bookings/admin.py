@@ -4,7 +4,8 @@ from django.utils.html import format_html
 import stripe
 from django.conf import settings
 from .models import UserProfile, MealSlotTime, Table, Reservation, Payment
-stripe.api_key = settings.STRIPE_SECRET_KEY
+
+admin.site.site_header = "Fine Table"
 # Register your models here.
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
@@ -24,8 +25,9 @@ class TableAdmin(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ['user_id', 'table_id', 'description', 'reservation_date', 'slot_time_id']
-    list_filter = ['reservation_date']
+    readonly_fields = ["user_id"]
+    list_display = ['user_id', 'table_id', 'description', 'reservation_date', 'slot_time_id', 'no_show']
+    list_filter = ['reservation_date', 'no_show']
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
@@ -70,3 +72,4 @@ class PaymentAdmin(admin.ModelAdmin):
         return redirect(f'/admin/app_name/payment/{payment.id}/change/')
 
 admin.site.unregister(Group)
+admin.site.unregister(Payment)
