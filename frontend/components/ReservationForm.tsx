@@ -82,7 +82,7 @@ export default function ReservationForm() {
           tableData,
         });
         console.log("response", response);
-        // window.location.href = response.data.sessionUrl;
+        window.location.href = response.data.sessionUrl;
       } catch (error: any) {
         let errorMsg = error.response.data.error;
         toast({
