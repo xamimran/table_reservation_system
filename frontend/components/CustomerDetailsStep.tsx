@@ -35,7 +35,7 @@ export default function CustomerDetailsStep({
   };
 
   return (
-    <div className="space-y-6  h-[600px]">
+    <div className="space-y-6  h-[500px]">
       <h2 className="text-2xl font-bold mb-4">Customer Details</h2>
       <div className="space-y-4">
         <div className="space-y-2">
@@ -93,7 +93,7 @@ export default function CustomerDetailsStep({
             className="text-lg p-3"
           />
         </div>
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label
             htmlFor="user_name"
             className="text-lg font-medium flex items-center space-x-2"
@@ -111,7 +111,7 @@ export default function CustomerDetailsStep({
             required
             className="text-lg p-3"
           />
-        </div>
+        </div> */}
         <div className="space-y-2">
           <Label
             htmlFor="phone"
@@ -131,7 +131,7 @@ export default function CustomerDetailsStep({
             className="text-lg p-3"
           />
         </div>
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label
             htmlFor="phone"
             className="text-lg font-medium flex items-center space-x-2"
@@ -149,7 +149,7 @@ export default function CustomerDetailsStep({
             required
             className="text-lg p-3"
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

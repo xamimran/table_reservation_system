@@ -1,0 +1,2 @@
+export const STRIPE_SECRET_KEY = "sk_test_51PpvOqRszTyZf6hG7oOEKqA39KAeCga8R2dqNzJP49Lu5EX21CWQaDu1KF2dFAGF2wcJmCBoYsinbjUVWXWmhe1S00Q1dVp1fI"
+export const PRODUCT_ID= "price_1Q3GzBRszTyZf6hGEKptEpob"

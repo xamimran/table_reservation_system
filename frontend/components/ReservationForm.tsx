@@ -10,6 +10,7 @@ import DateStep from "./DateStep";
 import CustomerDetailsStep from "./CustomerDetailsStep";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import DefaultLoader from "./DefaultLoader";
 
 const steps = [
   { title: "Meal Type", icon: "🍽️", component: MealTypeStep },
@@ -35,6 +36,7 @@ export default function ReservationForm() {
     user_notes: "",
   });
   const [availabilityChecked, setAvailabilityChecked] = useState(false);
+  const [isLoading, setIsloading] = useState(false);
   const { toast } = useToast();
 
   const handleStepClick = (index: number) => {
@@ -69,7 +71,7 @@ export default function ReservationForm() {
     // Check if we are on the last step
     if (currentStep === steps.length - 1) {
       console.log("Submitting reservation", customerDetails);
-
+      setIsloading(true);
       try {
         const response = await axios.post("/api/make-reservation", {
           mealType,
@@ -80,9 +82,18 @@ export default function ReservationForm() {
           tableData,
         });
         console.log("response", response);
-        window.location.href = response.data.sessionUrl;
-      } catch (error) {
-        console.log("Error submitting form", error);
+        // window.location.href = response.data.sessionUrl;
+      } catch (error: any) {
+        let errorMsg = error.response.data.error;
+        toast({
+          variant: "destructive",
+          title: `Reservation Failed.`,
+          description: `${errorMsg}`,
+          duration: 1500,
+        });
+        console.log("Error submitting form", errorMsg);
+      } finally {
+        setIsloading(false);
       }
     }
   };
@@ -267,6 +278,7 @@ export default function ReservationForm() {
           </div>
         </div>
       </form>
+      {isLoading && <DefaultLoader />}
     </div>
   );
 }
