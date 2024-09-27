@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.models import Group
 from django.utils.html import format_html
 import stripe
 from django.conf import settings
@@ -67,3 +68,5 @@ class PaymentAdmin(admin.ModelAdmin):
 
         # Redirect back to the payment list
         return redirect(f'/admin/app_name/payment/{payment.id}/change/')
+
+admin.site.unregister(Group)
