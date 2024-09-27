@@ -9,6 +9,7 @@ import PartySizeStep from "./PartySizeStep";
 import DateStep from "./DateStep";
 import CustomerDetailsStep from "./CustomerDetailsStep";
 import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 const steps = [
   { title: "Meal Type", icon: "🍽️", component: MealTypeStep },
@@ -34,8 +35,17 @@ export default function ReservationForm() {
     user_notes: "",
   });
   const [availabilityChecked, setAvailabilityChecked] = useState(false);
+  const { toast } = useToast();
 
   const handleStepClick = (index: number) => {
+    console.log("----", {
+      mealType,
+      adults,
+      children,
+      date,
+      customerDetails,
+      tableData,
+    });
     if (index < currentStep) {
       setCurrentStep(index);
     }
@@ -70,6 +80,7 @@ export default function ReservationForm() {
           tableData,
         });
         console.log("response", response);
+        window.location.href = response.data.sessionUrl;
       } catch (error) {
         console.log("Error submitting form", error);
       }
@@ -83,18 +94,34 @@ export default function ReservationForm() {
       adults: adults,
       children: children,
     });
-
+    const newdate = date ? new Date(date) : new Date();
+    const formattedDate = newdate.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
     if (response.data.data.available_table) {
-      console.log(response.data.data.available_table);
       setTableData(response.data.data.available_table);
+      const tableNumber = response.data.data.available_table;
+
+      toast({
+        title: `Table No. ${tableNumber} is Available`,
+        description: `Scheduled on ${formattedDate}.`,
+        duration: 1000,
+      });
+
       setIsTableAvailable(true);
     } else {
       console.log(response.data.data);
+      toast({
+        variant: "destructive",
+        title: `Uh oh! ${response.data.data.message}.`,
+        description: `No table available on : ${formattedDate}`,
+        duration: 1000,
+      });
       setIsTableAvailable(false);
     }
-
-    // Mark availability as checked
-    setAvailabilityChecked(true);
   };
 
   const renderStep = () => {
