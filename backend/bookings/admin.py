@@ -1,5 +1,7 @@
+from typing import Any
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from django.http import HttpRequest
 from django.utils.html import format_html
 import stripe
 from django.conf import settings
@@ -14,6 +16,11 @@ class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ['first_name', 'last_name', 'email']
     list_filter = ['first_name', 'last_name', 'email', 'phone', 'user_notes']
 
+    def save_model(self, request, obj, form, change):
+        if not obj.username: 
+            obj.username = obj.email 
+        super().save_model(request, obj, form, change)
+
 @admin.register(MealSlotTime)
 class MealSlotTimeAdmin(admin.ModelAdmin):
     list_display = ['slot_name', 'start_time', 'end_time']
@@ -25,9 +32,15 @@ class TableAdmin(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    readonly_fields = ["user_id"]
-    list_display = ['user_id', 'table_id', 'description', 'reservation_date', 'slot_time_id', 'no_show']
+    list_display = ['table_id', 'description', 'reservation_date', 'slot_time_id', 'no_show']
     list_filter = ['reservation_date', 'no_show']
+
+    # Corrected method signature for get_readonly_fields
+    def get_readonly_fields(self, request: HttpRequest, obj=None):
+        if obj:
+            return ['user_id']
+        return []
+    
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):

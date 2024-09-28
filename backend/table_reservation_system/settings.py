@@ -132,3 +132,12 @@ STRIPE_SECRET_KEY = 'sk_test_51Q2M6V1omZnM38gMsZk99Honzma9auS03RUqREwT6TogmTxpvt
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51Q2M6V1omZnM38gMl9s0JnnbyqYKIlNyxNMvFSQp0toPHMUQMiFHDbIcAthMVLgQktbfeOzkRvUL67RZMODHx3Qq00rUbEo8f3'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Email settings (example configuration)
+# DEFAULT_FROM_EMAIL = 'admin@yourdomain.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'usama.imran08991@gmail.com'
+EMAIL_HOST_PASSWORD = 'qnaa cdae cdsg oiwm'
