@@ -11,12 +11,13 @@ import CustomerDetailsStep from "./CustomerDetailsStep";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import DefaultLoader from "./DefaultLoader";
+import Image from "next/image";
 
 const steps = [
-  { title: "Meal Type", icon: "🍽️", component: MealTypeStep },
-  { title: "Party Size", icon: "👥", component: PartySizeStep },
-  { title: "Date", icon: "📅", component: DateStep },
-  { title: "Details", icon: "📝", component: CustomerDetailsStep },
+  { title: "Meal Type", icon: "/meal-type.png", component: MealTypeStep },
+  { title: "Party Size", icon: "/party-size.png", component: PartySizeStep },
+  { title: "Date", icon: "/date.png", component: DateStep },
+  { title: "Details", icon: "/details.png", component: CustomerDetailsStep },
 ];
 
 export default function ReservationForm() {
@@ -183,19 +184,28 @@ export default function ReservationForm() {
               key={step.title}
               className={cn(
                 "flex items-center cursor-pointer",
-                index <= currentStep ? "text-blue-600" : "text-gray-500"
+                index <= currentStep ? "text-[#eab24f]" : "text-gray-500"
               )}
               onClick={() => handleStepClick(index)}
             >
               <span
                 className={cn(
-                  "flex items-center justify-center w-8 h-8 mr-2 text-xs border rounded-full shrink-0",
+                  "flex items-center justify-center w-8 h-8 mr-2 rounded-full text-xs  shrink-0",
                   index < currentStep
-                    ? "border-blue-600 bg-blue-600 text-white"
+                    ? "border-[#eab24f] bg-[#eab24f] text-white"
                     : "border-gray-500"
                 )}
               >
-                {index < currentStep ? "✓" : step.icon}
+                {index < currentStep ? (
+                  "✓"
+                ) : (
+                  <Image
+                    src={step.icon}
+                    alt={step.icon}
+                    width="64"
+                    height="64"
+                  />
+                )}
               </span>
               {step.title}
               {index < steps.length - 1 && (
@@ -232,7 +242,7 @@ export default function ReservationForm() {
           </motion.div>
         </AnimatePresence>
         <div className="mt-8 flex justify-between">
-          {currentStep > 0 && (
+          {currentStep > 0 ? (
             <Button
               type="button"
               variant="outline"
@@ -241,6 +251,8 @@ export default function ReservationForm() {
             >
               Previous
             </Button>
+          ) : (
+            <div></div>
           )}
           <div className="flex justify-end space-x-4">
             {currentStep === 2 && (
