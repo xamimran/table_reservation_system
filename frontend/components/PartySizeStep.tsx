@@ -7,6 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Users, User } from "lucide-react";
+import Image from "next/image";
 
 interface PartySizeStepProps {
   adults: string;
@@ -36,7 +37,14 @@ export default function PartySizeStep({
             htmlFor="adults"
             className="text-lg font-medium flex items-center space-x-2"
           >
-            <Users className="w-5 h-5" />
+            <Image
+              src="/party-size.png"
+              alt="/party-size.png"
+              width="20"
+              height="20"
+            />
+
+            {/* <Users className="w-5 h-5" /> */}
             <span>Adults</span>
           </Label>
           <Select
@@ -67,7 +75,14 @@ export default function PartySizeStep({
             htmlFor="children"
             className="text-lg font-medium flex items-center space-x-2"
           >
-            <User className="w-5 h-5" />
+            <Image
+              src="/party-size.png"
+              alt="/party-size.png"
+              width="20"
+              height="20"
+            />
+
+            {/* <User className="w-5 h-5" /> */}
             <span>Children</span>
           </Label>
           <Select value={children} onValueChange={setChildren}>
@@ -88,8 +103,15 @@ export default function PartySizeStep({
           </Select>
         </div>
       </div>
-      <p className="text-lg flex items-center space-x-2 bg-blue-100 p-4 rounded-md border border-blue-200 text-blue-700">
-        <Users className="w-6 h-6" />
+      <p className="text-lg flex items-center space-x-2 bg-yellow-50 border-[#eab24f] p-4 rounded-md border  text-[#eab24f]">
+        {/* <Users className="w-6 h-6" /> */}
+        <Image
+          src="/party-size.png"
+          alt="/party-size.png"
+          width="28"
+          height="28"
+        />
+
         <span>
           <strong>{adults}</strong> {adults === "1" ? "adult" : "adults"} and{" "}
           <strong>{children}</strong> {children === "1" ? "child" : "children"}{" "}

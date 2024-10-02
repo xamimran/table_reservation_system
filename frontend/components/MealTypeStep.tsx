@@ -63,7 +63,7 @@ export default function MealTypeStep({
       {loading ? (
         <Loader
           size={40}
-          color="text-blue-600"
+          color="text-[#eab24f]"
           text="Loading meal options..."
         />
       ) : (
@@ -86,13 +86,13 @@ export default function MealTypeStep({
                   "bg-white border-2 border-gray-200 shadow-sm",
                   "hover:bg-yellow-50 hover:border-yellow-300",
                   mealType === option.id
-                    ? "bg-blue-100 border-blue-500 text-blue-700"
+                    ? "bg-yellow-50 border-[#eab24f] text-[#eab24f]"
                     : "bg-white border-gray-200 text-gray-900"
                 )}
               >
                 <div className="flex items-center space-x-3">
                   <span className="text-2xl">
-                    {getIconForMeal(option.slot_name)}
+                    {/* {getIconForMeal(option.slot_name)} */}
                   </span>
                   <span className="text-lg font-medium">
                     {option.slot_name}

@@ -76,7 +76,7 @@ export default function FailedPage() {
         <div className="space-y-4">
           <button
   onClick={() => router.back()}
-  className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out flex items-center justify-center"
+  className="w-full bg-blue-500 hover:bg-[#eab24f] text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out flex items-center justify-center"
           >
             <RefreshCw className="mr-2" />
             Try Again

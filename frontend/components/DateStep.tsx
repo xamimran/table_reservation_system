@@ -112,12 +112,11 @@ export default function DateStep({
                 variant="outline"
                 className={cn(
                   "h-20 font-normal flex flex-col items-center justify-start p-1",
-                  isSelected && "bg-blue-100 text-blue-600 font-semibold",
+                  isSelected && "bg-yellow-100 text-[#eab24f] font-semibold",
                   isPast &&
                     !isBooked &&
                     "bg-gray-100 text-gray-400 cursor-not-allowed hover:bg-gray-100",
-                  !isCurrentMonth && "text-gray-500",
-                  isBooked && "bg-orange-100 text-orange-600"
+                  !isCurrentMonth && "text-gray-500"
                 )}
                 onClick={(e) => handleDateClick(e, date)}
                 disabled={isPast && !isBooked}
@@ -127,11 +126,6 @@ export default function DateStep({
                 <span className="text-lg font-semibold">
                   {format(date, "d")}
                 </span>
-                {isBooked && (
-                  <div className="mt-1 text-xs text-orange-500 font-medium">
-                    Limited
-                  </div>
-                )}
               </Button>
             );
           })}

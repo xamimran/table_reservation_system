@@ -8,7 +8,7 @@ interface LoaderProps {
 
 const Loader: React.FC<LoaderProps> = ({
   size = 24,
-  color = "text-blue-600",
+  color = "text-[#eab24f]",
   text = "Loading...",
 }) => {
   return (

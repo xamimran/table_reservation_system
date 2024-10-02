@@ -72,7 +72,7 @@ export default function SuccessPage() {
         <div className="flex justify-center mb-6">
           <CheckCircle className="text-green-500 w-16 h-16" />
         </div>
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Thank You for Your Order!</h1>
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Your Reservation was Successfull..!</h1>
         <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
           <p className="font-bold">Success</p>
           <p>Your payment was processed successfully.</p>
@@ -94,7 +94,7 @@ export default function SuccessPage() {
         <p className="text-center text-gray-600 text-sm mb-6">If you need assistance, please contact our support team.</p>
         <button
           onClick={() => router.push('/')}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out flex items-center justify-center"
+          className="w-full bg-blue-500 hover:bg-[#eab24f] text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out flex items-center justify-center"
         >
           <Home className="mr-2" />
           Return to Homepage
