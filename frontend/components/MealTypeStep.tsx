@@ -16,33 +16,22 @@ export default function MealTypeStep({
   setMealType,
 }: MealTypeStepProps) {
   const [mealOptions, setMealOptions] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true); // Set initial loading state to true
+  const [loading, setLoading] = useState(true);
 
   const getMealSlots = async () => {
     try {
       const response = await axios.get("/api/meal_slot_time");
       setMealOptions(response.data.data);
-      setLoading(false); // Stop loading after data is fetched
+      setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false); // Stop loading even if there's an error
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getMealSlots();
   }, []);
-
-  const getIconForMeal = (slotName: string) => {
-    switch (slotName.toLowerCase()) {
-      case "lunch":
-        return "🍽️"; // Lunch icon
-      case "dinner":
-        return "🌙"; // Dinner icon
-      default:
-        return "🍴"; // Default icon
-    }
-  };
 
   const formatTime = (time: string) => {
     const [hour, minute] = time.split(":");
@@ -56,10 +45,11 @@ export default function MealTypeStep({
   };
 
   return (
-    <div className="space-y-6 h-[400px]">
-      <h2 className="text-2xl font-bold mb-4">Select Meal Type</h2>
+    <div className="space-y-4 sm:space-y-6 h-full sm:h-[400px] overflow-y-auto">
+      <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
+        Select Meal Type
+      </h2>
 
-      {/* Loader: Display the loader while fetching meal slots */}
       {loading ? (
         <Loader
           size={40}
@@ -70,7 +60,7 @@ export default function MealTypeStep({
         <RadioGroup
           value={mealType !== null ? String(mealType) : ""}
           onValueChange={(value) => setMealType(Number(value))}
-          className="space-y-4"
+          className="space-y-2 sm:space-y-4"
         >
           {mealOptions.map((option) => (
             <div key={option.id}>
@@ -82,7 +72,7 @@ export default function MealTypeStep({
               <Label
                 htmlFor={String(option.id)}
                 className={cn(
-                  "flex items-center justify-between w-full p-4 rounded-lg cursor-pointer transition-all duration-300 ease-in-out",
+                  "flex flex-col sm:flex-row items-start sm:items-center justify-between w-full p-3 sm:p-4 rounded-lg cursor-pointer transition-all duration-300 ease-in-out",
                   "bg-white border-2 border-gray-200 shadow-sm",
                   "hover:bg-yellow-50 hover:border-yellow-300",
                   mealType === option.id
@@ -90,16 +80,13 @@ export default function MealTypeStep({
                     : "bg-white border-gray-200 text-gray-900"
                 )}
               >
-                <div className="flex items-center space-x-3">
-                  <span className="text-2xl">
-                    {/* {getIconForMeal(option.slot_name)} */}
-                  </span>
-                  <span className="text-lg font-medium">
+                <div className="flex items-center space-x-3 mb-2 sm:mb-0">
+                  <span className="text-lg sm:text-xl font-medium">
                     {option.slot_name}
                   </span>
                 </div>
-                <div className="flex items-center text-sm text-gray-500">
-                  <Clock className="w-4 h-4 mr-1" />
+                <div className="flex items-center text-xs sm:text-sm text-gray-500">
+                  <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                   <span>
                     {formatTime(option.start_time)} -{" "}
                     {formatTime(option.end_time)}

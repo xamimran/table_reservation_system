@@ -35,15 +35,17 @@ export default function CustomerDetailsStep({
   };
 
   return (
-    <div className="space-y-6  h-[500px]">
-      <h2 className="text-2xl font-bold mb-4">Customer Details</h2>
-      <div className="space-y-4">
+    <div className="space-y-4 sm:space-y-6 h-full sm:h-[500px] overflow-y-auto">
+      <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
+        Customer Details
+      </h2>
+      <div className="space-y-3 sm:space-y-4">
         <div className="space-y-2">
           <Label
-            htmlFor="name"
-            className="text-lg font-medium flex items-center space-x-2"
+            htmlFor="first_name"
+            className="text-base sm:text-lg font-medium flex items-center space-x-2"
           >
-            <User className="w-5 h-5" />
+            <User className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>First Name</span>
           </Label>
           <Input
@@ -53,15 +55,15 @@ export default function CustomerDetailsStep({
               setCustomerDetails({ ...details, first_name: e.target.value })
             }
             required
-            className="text-lg p-3"
+            className="text-base sm:text-lg p-2 sm:p-3"
           />
         </div>
         <div className="space-y-2">
           <Label
-            htmlFor="name"
-            className="text-lg font-medium flex items-center space-x-2"
+            htmlFor="last_name"
+            className="text-base sm:text-lg font-medium flex items-center space-x-2"
           >
-            <User className="w-5 h-5" />
+            <User className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>Last Name</span>
           </Label>
           <Input
@@ -71,15 +73,15 @@ export default function CustomerDetailsStep({
               setCustomerDetails({ ...details, last_name: e.target.value })
             }
             required
-            className="text-lg p-3"
+            className="text-base sm:text-lg p-2 sm:p-3"
           />
         </div>
         <div className="space-y-2">
           <Label
             htmlFor="email"
-            className="text-lg font-medium flex items-center space-x-2"
+            className="text-base sm:text-lg font-medium flex items-center space-x-2"
           >
-            <Mail className="w-5 h-5" />
+            <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>Email</span>
           </Label>
           <Input
@@ -90,34 +92,15 @@ export default function CustomerDetailsStep({
               setCustomerDetails({ ...details, email: e.target.value })
             }
             required
-            className="text-lg p-3"
+            className="text-base sm:text-lg p-2 sm:p-3"
           />
         </div>
-        {/* <div className="space-y-2">
-          <Label
-            htmlFor="user_name"
-            className="text-lg font-medium flex items-center space-x-2"
-          >
-            <Mail className="w-5 h-5" />
-            <span>User Name</span>
-          </Label>
-          <Input
-            id="user_name"
-            type="user_name"
-            value={details.user_name}
-            onChange={(e) =>
-              setCustomerDetails({ ...details, user_name: e.target.value })
-            }
-            required
-            className="text-lg p-3"
-          />
-        </div> */}
         <div className="space-y-2">
           <Label
             htmlFor="phone"
-            className="text-lg font-medium flex items-center space-x-2"
+            className="text-base sm:text-lg font-medium flex items-center space-x-2"
           >
-            <Phone className="w-5 h-5" />
+            <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>Phone</span>
           </Label>
           <Input
@@ -128,28 +111,9 @@ export default function CustomerDetailsStep({
               setCustomerDetails({ ...details, phone: e.target.value })
             }
             required
-            className="text-lg p-3"
+            className="text-base sm:text-lg p-2 sm:p-3"
           />
         </div>
-        {/* <div className="space-y-2">
-          <Label
-            htmlFor="phone"
-            className="text-lg font-medium flex items-center space-x-2"
-          >
-            <Phone className="w-5 h-5" />
-            <span>User Notes</span>
-          </Label>
-          <Input
-            id="user_notes"
-            type="textarea"
-            value={details.user_notes}
-            onChange={(e) =>
-              setCustomerDetails({ ...details, user_notes: e.target.value })
-            }
-            required
-            className="text-lg p-3"
-          />
-        </div> */}
       </div>
     </div>
   );

@@ -41,14 +41,6 @@ export default function ReservationForm() {
   const { toast } = useToast();
 
   const handleStepClick = (index: number) => {
-    console.log("----", {
-      mealType,
-      adults,
-      children,
-      date,
-      customerDetails,
-      tableData,
-    });
     if (index < currentStep) {
       setCurrentStep(index);
     }
@@ -69,9 +61,7 @@ export default function ReservationForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check if we are on the last step
     if (currentStep === steps.length - 1) {
-      console.log("Submitting reservation", customerDetails);
       setIsloading(true);
       try {
         const response = await axios.post("/api/make-reservation", {
@@ -82,7 +72,6 @@ export default function ReservationForm() {
           customerDetails,
           tableData,
         });
-        console.log("response", response);
         window.location.href = response.data.sessionUrl;
       } catch (error: any) {
         let errorMsg = error.response.data.error;
@@ -92,7 +81,6 @@ export default function ReservationForm() {
           description: `${errorMsg}`,
           duration: 1500,
         });
-        console.log("Error submitting form", errorMsg);
       } finally {
         setIsloading(false);
       }
@@ -125,7 +113,6 @@ export default function ReservationForm() {
 
       setIsTableAvailable(true);
     } else {
-      console.log(response.data.data);
       toast({
         variant: "destructive",
         title: `Uh oh! ${response.data.data.message}.`,
@@ -173,24 +160,24 @@ export default function ReservationForm() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
+    <div className="max-w-4xl mx-auto mt-4 sm:mt-10 p-4 sm:p-8 bg-white rounded-lg shadow-lg">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-8 text-center text-gray-800">
         Table Reservation
       </h1>
-      <div className="mb-8">
-        <ol className="flex items-center w-full p-3 space-x-2 justify-between text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 sm:space-x-4">
+      <div className="mb-4 sm:mb-8">
+        <ol className="flex flex-wrap sm:flex-nowrap items-center w-full p-2 sm:p-3 space-x-1 sm:space-x-2 justify-between text-xs sm:text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700">
           {steps.map((step, index) => (
             <li
               key={step.title}
               className={cn(
-                "flex items-center cursor-pointer",
+                "flex items-center cursor-pointer mb-2 sm:mb-0",
                 index <= currentStep ? "text-[#eab24f]" : "text-gray-500"
               )}
               onClick={() => handleStepClick(index)}
             >
               <span
                 className={cn(
-                  "flex items-center justify-center w-8 h-8 mr-2 rounded-full text-xs  shrink-0",
+                  "flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 mr-1 sm:mr-2 rounded-full text-xs shrink-0",
                   index < currentStep
                     ? "border-[#eab24f] bg-[#eab24f] text-white"
                     : "border-gray-500"
@@ -202,16 +189,17 @@ export default function ReservationForm() {
                   <Image
                     src={step.icon}
                     alt={step.icon}
-                    width="64"
-                    height="64"
+                    width="32"
+                    height="32"
+                    className="w-4 h-4 sm:w-6 sm:h-6"
                   />
                 )}
               </span>
-              {step.title}
+              <span className="hidden sm:inline">{step.title}</span>
               {index < steps.length - 1 && (
                 <svg
                   aria-hidden="true"
-                  className="w-4 h-4 ml-2 sm:ml-4"
+                  className="w-3 h-3 ml-1 sm:w-4 sm:h-4 sm:ml-2"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -241,25 +229,25 @@ export default function ReservationForm() {
             {renderStep()}
           </motion.div>
         </AnimatePresence>
-        <div className="mt-8 flex justify-between">
+        <div className="mt-4 sm:mt-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
           {currentStep > 0 ? (
             <Button
               type="button"
               variant="outline"
               onClick={handlePrevious}
-              className="text-lg px-6 py-3"
+              className="text-base sm:text-lg px-4 sm:px-6 py-2 sm:py-3 w-full sm:w-auto"
             >
               Previous
             </Button>
           ) : (
-            <div></div>
+            <div className="hidden sm:block"></div>
           )}
-          <div className="flex justify-end space-x-4">
+          <div className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             {currentStep === 2 && (
               <Button
                 type="button"
                 onClick={handleAvailability}
-                className="text-lg px-6 py-3"
+                className="text-base sm:text-lg px-4 sm:px-6 py-2 sm:py-3 w-full sm:w-auto"
               >
                 Check Availability
               </Button>
@@ -274,7 +262,7 @@ export default function ReservationForm() {
                     !isTableAvailable &&
                     !availabilityChecked)
                 }
-                className="text-lg px-6 py-3"
+                className="text-base sm:text-lg px-4 sm:px-6 py-2 sm:py-3 w-full sm:w-auto"
               >
                 Next
               </Button>
@@ -282,7 +270,7 @@ export default function ReservationForm() {
               <Button
                 type="button"
                 onClick={handleSubmit}
-                className="text-lg px-6 py-3"
+                className="text-base sm:text-lg px-4 sm:px-6 py-2 sm:py-3 w-full sm:w-auto"
               >
                 Submit Reservation
               </Button>

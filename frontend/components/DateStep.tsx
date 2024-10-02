@@ -37,12 +37,12 @@ export default function DateStep({
   ];
 
   const nextMonth = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     setCurrentDate(addMonths(currentDate, 1));
   };
 
   const prevMonth = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     setCurrentDate(addMonths(currentDate, -1));
   };
 
@@ -58,7 +58,7 @@ export default function DateStep({
   }
 
   const handleDateClick = (e: React.MouseEvent, date: Date) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     if (
       !isBefore(date, startOfDay(new Date())) ||
       bookedSlots.some((slot) => isSameDay(date, slot.date))
@@ -69,9 +69,11 @@ export default function DateStep({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold mb-4">Select Date</h2>
-      <div className="bg-white rounded-lg shadow p-4">
-        <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">
+        Select Date
+      </h2>
+      <div className="bg-white rounded-lg shadow p-2 sm:p-4">
+        <div className="flex justify-between items-center mb-2 sm:mb-4">
           <Button
             variant="outline"
             size="icon"
@@ -80,7 +82,7 @@ export default function DateStep({
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <h2 className="text-lg font-semibold">
+          <h2 className="text-base sm:text-lg font-semibold">
             {format(currentDate, "MMMM yyyy")}
           </h2>
           <Button
@@ -92,9 +94,12 @@ export default function DateStep({
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="text-center font-medium text-gray-500">
+            <div
+              key={day}
+              className="text-center font-medium text-gray-500 text-xs sm:text-sm"
+            >
               {day}
             </div>
           ))}
@@ -111,7 +116,7 @@ export default function DateStep({
                 key={i}
                 variant="outline"
                 className={cn(
-                  "h-20 font-normal flex flex-col items-center justify-start p-1",
+                  "h-12 sm:h-20 font-normal flex flex-col items-center justify-start p-1",
                   isSelected && "bg-yellow-100 text-[#eab24f] font-semibold",
                   isPast &&
                     !isBooked &&
@@ -122,8 +127,10 @@ export default function DateStep({
                 disabled={isPast && !isBooked}
                 type="button"
               >
-                <span className="text-sm">{format(date, "EEE")}</span>
-                <span className="text-lg font-semibold">
+                <span className="text-xs sm:text-sm">
+                  {format(date, "EEE")}
+                </span>
+                <span className="text-sm sm:text-lg font-semibold">
                   {format(date, "d")}
                 </span>
               </Button>

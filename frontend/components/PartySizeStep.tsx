@@ -6,7 +6,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Users, User } from "lucide-react";
 import Image from "next/image";
 
 interface PartySizeStepProps {
@@ -29,13 +28,13 @@ export default function PartySizeStep({
   );
 
   return (
-    <div className="space-y-6  h-[400px]">
-      <h2 className="text-2xl font-bold mb-4">Party Size</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="space-y-4 sm:space-y-6 h-full sm:h-[400px]">
+      <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Party Size</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <div className="space-y-2">
           <Label
             htmlFor="adults"
-            className="text-lg font-medium flex items-center space-x-2"
+            className="text-base sm:text-lg font-medium flex items-center space-x-2"
           >
             <Image
               src="/party-size.png"
@@ -43,8 +42,6 @@ export default function PartySizeStep({
               width="20"
               height="20"
             />
-
-            {/* <Users className="w-5 h-5" /> */}
             <span>Adults</span>
           </Label>
           <Select
@@ -54,7 +51,10 @@ export default function PartySizeStep({
               setChildren("0");
             }}
           >
-            <SelectTrigger id="adults" className="w-full text-lg p-3">
+            <SelectTrigger
+              id="adults"
+              className="w-full text-base sm:text-lg p-2 sm:p-3"
+            >
               <SelectValue placeholder="Select number of adults" />
             </SelectTrigger>
             <SelectContent>
@@ -62,7 +62,7 @@ export default function PartySizeStep({
                 <SelectItem
                   key={num}
                   value={num.toString()}
-                  className="text-lg"
+                  className="text-base sm:text-lg"
                 >
                   {num}
                 </SelectItem>
@@ -73,7 +73,7 @@ export default function PartySizeStep({
         <div className="space-y-2">
           <Label
             htmlFor="children"
-            className="text-lg font-medium flex items-center space-x-2"
+            className="text-base sm:text-lg font-medium flex items-center space-x-2"
           >
             <Image
               src="/party-size.png"
@@ -81,12 +81,13 @@ export default function PartySizeStep({
               width="20"
               height="20"
             />
-
-            {/* <User className="w-5 h-5" /> */}
             <span>Children</span>
           </Label>
           <Select value={children} onValueChange={setChildren}>
-            <SelectTrigger id="children" className="w-full text-lg p-3">
+            <SelectTrigger
+              id="children"
+              className="w-full text-base sm:text-lg p-2 sm:p-3"
+            >
               <SelectValue placeholder="Select number of children" />
             </SelectTrigger>
             <SelectContent>
@@ -94,7 +95,7 @@ export default function PartySizeStep({
                 <SelectItem
                   key={num}
                   value={num.toString()}
-                  className="text-lg"
+                  className="text-base sm:text-lg"
                 >
                   {num}
                 </SelectItem>
@@ -103,15 +104,13 @@ export default function PartySizeStep({
           </Select>
         </div>
       </div>
-      <p className="text-lg flex items-center space-x-2 bg-yellow-50 border-[#eab24f] p-4 rounded-md border  text-[#eab24f]">
-        {/* <Users className="w-6 h-6" /> */}
+      <p className="text-base sm:text-lg flex items-center space-x-2 bg-yellow-50 border-[#eab24f] p-3 sm:p-4 rounded-md border text-[#eab24f]">
         <Image
           src="/party-size.png"
           alt="/party-size.png"
           width="28"
           height="28"
         />
-
         <span>
           <strong>{adults}</strong> {adults === "1" ? "adult" : "adults"} and{" "}
           <strong>{children}</strong> {children === "1" ? "child" : "children"}{" "}
