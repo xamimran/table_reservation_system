@@ -1,16 +1,17 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.conf import settings
 from django.core.mail import send_mail
 from django.dispatch import receiver
+from accounts.models import User
+from calendarapp.models import Event
 import pdb
 # Create your models here.
 
 from django.contrib.auth.models import AbstractUser
 
-class UserProfile(AbstractUser):
-    phone = models.CharField(max_length=12)
-    user_notes = models.TextField()
+class UserProfile(User):
 
     def __str__(self) -> str:
         return f"(id: {self.id}) {self.first_name} {self.last_name}"
@@ -21,30 +22,42 @@ class MealSlotTime(models.Model):
     end_time = models.TimeField()
 
     def __str__(self) -> str:
-        return f"{self.slot_name} ({self.start_time} - {self.end_time})"
+        return f"{self.slot_name}"
 
 class Table(models.Model):
     table_number = models.IntegerField(unique=True)
     is_available = models.BooleanField(default=True)
-    slot_time_id = models.ForeignKey(MealSlotTime, on_delete=models.CASCADE)
     adults = models.IntegerField()
     children = models.IntegerField()
 
     def __str__(self) -> str:
-        return f"Table Number: {self.table_number} ({'Avliable' if self.is_available else 'Not Avliable'})"
+        return f"{self.table_number}"
 
 class Reservation(models.Model):
-    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     table_id = models.ForeignKey(Table, on_delete=models.CASCADE)
     description = models.TextField(max_length=50)
-    reservation_date = models.DateField()
+    reservation_date = models.DateTimeField()
     payment_status = models.BooleanField(default=False)
     slot_time_id = models.ForeignKey(MealSlotTime, on_delete=models.CASCADE, default=0)
     no_show = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"Reservation for {self.user_id.first_name.capitalize() } {self.user_id.last_name.capitalize()} on {self.reservation_date}"
+    class Meta:
+        verbose_name = "Reservation"
+        verbose_name_plural = "Reservation List"
+    
+    def clean(self):
+        # Check for events on the reservation date
+        events = Event.objects.filter(start_time__date=self.reservation_date)  # Adjust this if you want to consider time as well
+        if events.exists():
+            raise ValidationError(f"Cannot reserve a table on {self.reservation_date} because there is an event scheduled.")
 
+    def save(self, *args, **kwargs):
+        self.clean()  # Call the clean method to validate before saving
+        super().save(*args, **kwargs)
+        
 @receiver(post_save, sender=Reservation)
 def send_reservation_email(sender, instance, created, **kwargs):
     if created:  # Check if this is a new reservation
@@ -91,7 +104,7 @@ class PaymentStaus(models.TextChoices):
     FAILED = 'F', 'Failed'
 
 class Payment(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     reservation_id = models.ForeignKey(Reservation, on_delete=models.CASCADE)
     description = models.CharField(max_length=50) # Fix here
     table_id = models.ForeignKey(Table, on_delete=models.CASCADE)

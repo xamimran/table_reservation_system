@@ -1,0 +1,93 @@
+/* Navbar background */
+#header {
+    background-color: #eab24f !important; /* Navbar */
+    color: inherit; /* Keep original text color */
+}
+
+/* Module/Model headers */
+.module h2, .inline-group h2 {
+    background-color: #eab24f !important; /* Model header color */
+    color: inherit; /* Keep original text color */
+}
+
+/* Filter section header */
+#changelist-filter h2 {
+    background-color: #eab24f !important; /* Filter section header */
+    color: inherit; /* Keep original text color */
+}
+
+/* Selected filter item background */
+#changelist-filter li.selected a {
+    background-color: #eab24f !important; /* Selected filter item */
+    color: inherit; /* Keep original text color */
+}
+
+/* Paginator background */
+.paginator a:link, .paginator a:visited {
+    background-color: #eab24f !important; /* Paginator background */
+    color: inherit; /* Keep original text color */
+}
+
+/* Breadcrumbs background */
+div.breadcrumbs {
+    background-color: #eab24f !important; /* Breadcrumbs background */
+    color: inherit; /* Keep original text color */
+}
+
+/* Buttons across forms and lists */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background-color: #eab24f !important; /* Buttons */
+    color: inherit; /* Keep original text color */
+}
+
+/* Active or focused button hover effect */
+.button:hover, input[type=submit]:hover, input[type=button]:hover {
+    background-color: #d4a642 !important; /* Slightly darker yellow on hover */
+    color: inherit; /* Keep original text color */
+}
+
+/* Background for the admin page header */
+#content h1 {
+    background-color: #eab24f !important; /* Page title background */
+    color: inherit; /* Keep original text color */
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+/* Selected table row or active table item */
+table tr.selected, table tr:hover {
+    background-color: #eab24f !important; /* Row background on selection or hover */
+    color: inherit; /* Keep original text color */
+}
+
+/* Custom styling for object tools (like add/change buttons) */
+.object-tools a {
+    background-color: #eab24f !important; /* Object tools buttons */
+    color: inherit; /* Keep original text color */
+}
+
+/* Calendar selected date background */
+.calendar td.selected a {
+    background-color: #eab24f !important; /* Calendar selected date */
+    color: inherit; /* Keep original text color */
+}
+
+/* Change custom fieldsets header background */
+fieldset.module h2 {
+    background-color: #eab24f !important; /* Fieldset header */
+    color: inherit; /* Keep original text color */
+}
+
+/* Action bar background (e.g., in lists) */
+.actions {
+    background-color: #eab24f !important; /* Action bar background */
+    color: inherit; /* Keep original text color */
+}
+
+/* Additional areas like form fieldsets, tabs, etc. */
+.tabular .module caption, .stacked h2 {
+    background-color: #eab24f !important; /* Tabular form headers */
+    color: inherit; /* Keep original text color */
+}
