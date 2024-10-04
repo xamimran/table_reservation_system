@@ -1,6 +1,10 @@
+'use client'
 import ReservationForm from "@/components/ReservationForm";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import Image from "next/image";
-
+import { PUBLISH_KEY } from "./constantVariable/constant";
+const stripePromise = loadStripe(PUBLISH_KEY);
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100">
@@ -8,13 +12,14 @@ export default function Home() {
         <div className="flex justify-center mb-8">
           <Image
             src="/black-logo.png"
-            width={150}
-            height={150}
+            width={400}
+            height={400}
             alt="Restaurant Logo"
-            className="w-96 h-20 sm:w-96 sm:h-20 md:w-96 md:h-20"
           />
         </div>
-        <ReservationForm />
+        <Elements stripe={stripePromise}>
+          <ReservationForm />
+        </Elements>{" "}
       </main>
     </div>
   );
