@@ -14,7 +14,7 @@ export default function SuccessPage() {
     const session_id = params.get("session_id");
 
     if (session_id) {
-      console.log("Fetching session data for ID:", session_id);
+      // console.log("Fetching session data for ID:", session_id);
       fetch(`/api/get-session?session_id=${session_id}`)
         .then((response) => {
           if (!response.ok) {
@@ -23,7 +23,7 @@ export default function SuccessPage() {
           return response.json();
         })
         .then((data) => {
-          console.log("Session data received:", data);
+          // console.log("Session data received:", data);
           setSessionData(data);
           setLoading(false);
         })
@@ -96,12 +96,12 @@ export default function SuccessPage() {
         </div>
         {sessionData && (
           <div className="space-y-3 mb-6">
-            <p className="text-gray-700 break-words">
+            {/* <p className="text-gray-700 break-words">
               <span className="font-semibold">Session ID:</span>
               <span className="text-sm" title={sessionData.id}>
                 {truncateSessionId(sessionData.id)}
               </span>
-            </p>
+            </p> */}
             <p className="text-gray-700">
               <span className="font-semibold">Payment Status:</span>{" "}
               {sessionData.payment_status}
@@ -112,7 +112,7 @@ export default function SuccessPage() {
               {sessionData.currency.toUpperCase()}
             </p>
             <p className="text-gray-700 break-words">
-              <span className="font-semibold">Customer Email:</span>
+              <span className="font-semibold">Customer Email: </span>
               <span className="text-sm">{sessionData.customer_email}</span>
             </p>
           </div>
