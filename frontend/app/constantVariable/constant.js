@@ -1,2 +1,3 @@
 export const STRIPE_SECRET_KEY = "sk_test_51PpvOqRszTyZf6hG7oOEKqA39KAeCga8R2dqNzJP49Lu5EX21CWQaDu1KF2dFAGF2wcJmCBoYsinbjUVWXWmhe1S00Q1dVp1fI"
 export const PRODUCT_ID= "price_1Q3GzBRszTyZf6hGEKptEpob"
+export const PUBLISH_KEY="pk_test_51PpvOqRszTyZf6hG7EMv1x6YD0NDz30uST5YwB2bbDUjWXb5trWgLNC9UML0uiLt2PvNzunhM5Mu2xvTmvqZPZr400TQU4qOae"

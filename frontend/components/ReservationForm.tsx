@@ -37,7 +37,7 @@ export default function ReservationForm() {
     user_notes: "",
   });
   const [availabilityChecked, setAvailabilityChecked] = useState(false);
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const handleStepClick = (index: number) => {
@@ -62,7 +62,7 @@ export default function ReservationForm() {
     e.preventDefault();
 
     if (currentStep === steps.length - 1) {
-      setIsloading(true);
+      setIsLoading(true);
       try {
         const response = await axios.post("/api/make-reservation", {
           mealType,
@@ -72,17 +72,17 @@ export default function ReservationForm() {
           customerDetails,
           tableData,
         });
-        window.location.href = response.data.sessionUrl;
+        window.location.href = response.data.paymentUrl;
       } catch (error: any) {
-        let errorMsg = error.response.data.error;
+        let errorMsg = error.response?.data?.error || "An error occurred";
         toast({
           variant: "destructive",
-          title: `Reservation Failed.`,
-          description: `${errorMsg}`,
+          title: "Reservation Failed",
+          description: errorMsg,
           duration: 1500,
         });
       } finally {
-        setIsloading(false);
+        setIsLoading(false);
       }
     }
   };

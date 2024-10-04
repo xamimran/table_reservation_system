@@ -74,13 +74,13 @@ export default function FailedPage() {
           If you need assistance or would like to try again, please contact our support team.
         </p>
         <div className="space-y-4">
-          <button
+          {/* <button
   onClick={() => router.back()}
   className="w-full bg-blue-500 hover:bg-[#eab24f] text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out flex items-center justify-center"
           >
             <RefreshCw className="mr-2" />
             Try Again
-          </button>
+          </button> */}
           <button
             onClick={() => router.push('/')}
             className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out flex items-center justify-center"
