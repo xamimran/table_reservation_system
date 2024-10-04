@@ -9,11 +9,11 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100">
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-4">
           <Image
-            src="/black-logo.png"
-            width={400}
-            height={400}
+            src="/client-logo.png"
+            width={300}
+            height={250}
             alt="Restaurant Logo"
           />
         </div>
