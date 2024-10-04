@@ -108,7 +108,7 @@ class Payment(models.Model):
     reservation_id = models.ForeignKey(Reservation, on_delete=models.CASCADE)
     description = models.CharField(max_length=50) # Fix here
     table_id = models.ForeignKey(Table, on_delete=models.CASCADE)
-    stripe_payment_id = models.IntegerField()
+    stripe_payment_id = models.TextField()
     amount = models.IntegerField()
     payment_date = models.DateField(auto_now_add=True)
     status = models.CharField(max_length=2, choices=PaymentStaus.choices, default=PaymentStaus.PENDING)
