@@ -3,23 +3,24 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.http import HttpRequest
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 import stripe
 from django.conf import settings
 from .models import UserProfile, MealSlotTime, Table, Reservation, Payment
 
 admin.site.site_header = "Fine Table"
 # Register your models here.
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    fields = ['first_name', 'last_name', 'email','phone', 'user_notes']
-    list_display = ['first_name', 'last_name', 'email', 'phone', 'user_notes']
-    search_fields = ['first_name', 'last_name', 'email']
-    list_filter = ['first_name', 'last_name', 'email', 'phone', 'user_notes']
+# @admin.register(UserProfile)
+# class UserProfileAdmin(admin.ModelAdmin):
+#     fields = ['first_name', 'last_name', 'email','phone', 'user_notes']
+#     list_display = ['first_name', 'last_name', 'email', 'phone', 'user_notes']
+#     search_fields = ['first_name', 'last_name', 'email']
+#     list_filter = ['first_name', 'last_name', 'email', 'phone', 'user_notes']
 
-    def save_model(self, request, obj, form, change):
-        if not obj.username: 
-            obj.username = obj.email 
-        super().save_model(request, obj, form, change)
+#     def save_model(self, request, obj, form, change):
+#         if not obj.username: 
+#             obj.username = obj.email 
+#         super().save_model(request, obj, form, change)
 
 @admin.register(MealSlotTime)
 class MealSlotTimeAdmin(admin.ModelAdmin):
@@ -32,7 +33,7 @@ class TableAdmin(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ['get_table_number', 'description', 'reservation_date', 'get_meal_type', 'display_no_show']
+    list_display = ['get_table_number', 'user_id', 'reservation_date', 'get_meal_type', 'display_no_show']
     list_filter = ['reservation_date', 'no_show']
 
     def display_no_show(self, obj):
@@ -41,12 +42,12 @@ class ReservationAdmin(admin.ModelAdmin):
     def get_table_number(self, obj):
         return obj.table_id.table_number
 
-    get_table_number.short_description = 'Table Number'
+    get_table_number.short_description = _('Table Number')
 
     def get_meal_type(self, obj):
         return obj.slot_time_id.slot_name
     
-    get_meal_type.short_description = 'Meal Type'
+    get_meal_type.short_description = _('Meal Type')
 
     # Corrected method signature for get_readonly_fields
     def get_readonly_fields(self, request: HttpRequest, obj=None):

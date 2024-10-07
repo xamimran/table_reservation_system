@@ -4,114 +4,127 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from django.core.mail import send_mail
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 from accounts.models import User
 from calendarapp.models import Event
-import pdb
-# Create your models here.
-
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 
 class UserProfile(User):
-
     def __str__(self) -> str:
         return f"(id: {self.id}) {self.first_name} {self.last_name}"
 
 class MealSlotTime(models.Model):
-    slot_name = models.CharField(max_length=50)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-
+    slot_name = models.CharField(_("Slot Name"), max_length=50)
+    start_time = models.TimeField(_("Start Time"))
+    end_time = models.TimeField(_("End Time"))
     def __str__(self) -> str:
         return f"{self.slot_name}"
+    
+    class Meta:
+        verbose_name = _("Meal Slot Time")
+        verbose_name_plural = _("Meals Time")
 
 class Table(models.Model):
-    table_number = models.IntegerField(unique=True)
-    is_available = models.BooleanField(default=True)
-    adults = models.IntegerField()
-    children = models.IntegerField()
+    table_number = models.IntegerField(_("Table Number"), unique=True)
+    is_available = models.BooleanField(_("Available"), default=True)
+    adults = models.IntegerField(_("Adults"))
+    children = models.IntegerField(_("Children"))
 
     def __str__(self) -> str:
         return f"{self.table_number}"
 
+    class Meta:
+        verbose_name = _("Table")
+        verbose_name_plural = _("Tables List")
+
 class Reservation(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    table_id = models.ForeignKey(Table, on_delete=models.CASCADE)
-    description = models.TextField(max_length=50)
-    reservation_date = models.DateTimeField()
-    payment_status = models.BooleanField(default=False)
-    slot_time_id = models.ForeignKey(MealSlotTime, on_delete=models.CASCADE, default=0)
-    no_show = models.BooleanField(default=False)
+    user_id = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    table_id = models.ForeignKey(Table, verbose_name=_("Table"), on_delete=models.CASCADE)
+    description = models.TextField(_("Description"), max_length=50)
+    reservation_date = models.DateTimeField(_("Reservation Date"))
+    payment_status = models.BooleanField(_("Payment Status"), default=False)
+    slot_time_id = models.ForeignKey(MealSlotTime, verbose_name=_("Meal Slot"), on_delete=models.CASCADE, default=0)
+    no_show = models.BooleanField(_("No Show"), default=False)
 
     def __str__(self) -> str:
-        return f"Reservation for {self.user_id.first_name.capitalize() } {self.user_id.last_name.capitalize()} on {self.reservation_date}"
+        return _("Reservation for {user} on {date}").format(user=self.user_id, date=self.reservation_date)
+
     class Meta:
-        verbose_name = "Reservation"
-        verbose_name_plural = "Reservation List"
-    
+        verbose_name = _("Reservation")
+        verbose_name_plural = _("Reservation List")
+
     def clean(self):
-        # Check for events on the reservation date
-        events = Event.objects.filter(start_time__date=self.reservation_date)  # Adjust this if you want to consider time as well
+        events = Event.objects.filter(start_time__date=self.reservation_date)
         if events.exists():
-            raise ValidationError(f"Cannot reserve a table on {self.reservation_date} because there is an event scheduled.")
+            raise ValidationError(_("Cannot reserve a table on {date} because there is an event scheduled.").format(date=self.reservation_date))
 
     def save(self, *args, **kwargs):
-        self.clean()  # Call the clean method to validate before saving
+        self.clean()
         super().save(*args, **kwargs)
-        
+
 @receiver(post_save, sender=Reservation)
 def send_reservation_email(sender, instance, created, **kwargs):
-    if created:  # Check if this is a new reservation
+    if created:
         user = instance.user_id
         table = instance.table_id
         meal_slot = instance.slot_time_id
-        
-        subject = 'Your Reservation Confirmation at Fine Table'
-        message = f"""
+
+        subject = _('Your Reservation Confirmation at Fine Table')
+        message = _("""
         <html>
             <body style="font-family: Arial, sans-serif; color: black; font-size: 16px;">
-                <p><strong>Dear {user.first_name} {user.last_name} ,</strong></p>
+                <p><strong>Dear {name},</strong></p>
                 <p>Thank you for choosing Fine Table! We are pleased to confirm your reservation. 🍽️</p>
                 <p><strong>Reservation Details:</strong></p>
                 <p>
-                    Name: {user.first_name} {user.last_name} 🌟<br>
-                    Phone Number: {user.phone} 📞<br>
-                    Reservation Date: {instance.reservation_date} 📅<br>
-                    Meal Type: {meal_slot.slot_name} 🍴<br>
-                    Meal Time: {meal_slot.start_time.strftime('%I:%M %p')} - {meal_slot.end_time.strftime('%I:%M %p')} ⏰<br>
-                    Number of Adults: {table.adults} 👨‍👩‍👧‍👦<br>
-                    Number of Children: {table.children} 👶<br>
-                    Assigned Table: {table.table_number} 🪑<br>
+                    Name: {name} 🌟<br>
+                    Phone Number: {phone} 📞<br>
+                    Reservation Date: {date} 📅<br>
+                    Meal Type: {meal_type} 🍴<br>
+                    Meal Time: {meal_start} - {meal_end} ⏰<br>
+                    Number of Adults: {adults} 👨‍👩‍👧‍👦<br>
+                    Number of Children: {children} 👶<br>
+                    Assigned Table: {table} 🪑<br>
                 </p>
             </body>
         </html>
-        """
+        """).format(
+            name=f"{user.first_name} {user.last_name}",
+            phone=user.phone,
+            date=instance.reservation_date,
+            meal_type=meal_slot.slot_name,
+            meal_start=meal_slot.start_time.strftime('%I:%M %p'),
+            meal_end=meal_slot.end_time.strftime('%I:%M %p'),
+            adults=table.adults,
+            children=table.children,
+            table=table.table_number
+        )
 
         recipient_list = [user.email]
-        # Send the email
         send_mail(
             subject,
             message,
-            settings.EMAIL_HOST_USER,  # Ensure this is set in settings.py
+            settings.EMAIL_HOST_USER,
             recipient_list,
             fail_silently=False,
-            html_message=message,  # Pass the HTML message
+            html_message=message,
         )
 
-  
 class PaymentStaus(models.TextChoices):
-    PENDING = 'P', 'Pending'
-    PAID = 'PA', 'Paid'
-    FAILED = 'F', 'Failed'
+    PENDING = 'P', _('Pending')
+    PAID = 'PA', _('Paid')
+    FAILED = 'F', _('Failed')
 
 class Payment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    reservation_id = models.ForeignKey(Reservation, on_delete=models.CASCADE)
-    description = models.CharField(max_length=50) # Fix here
-    table_id = models.ForeignKey(Table, on_delete=models.CASCADE)
-    stripe_payment_id = models.TextField()
-    amount = models.IntegerField()
-    payment_date = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=2, choices=PaymentStaus.choices, default=PaymentStaus.PENDING)
+    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    reservation_id = models.ForeignKey(Reservation, verbose_name=_("Reservation"), on_delete=models.CASCADE)
+    description = models.CharField(_("Description"), max_length=50)
+    table_id = models.ForeignKey(Table, verbose_name=_("Table"), on_delete=models.CASCADE)
+    stripe_payment_id = models.TextField(_("Stripe Payment ID"))
+    amount = models.IntegerField(_("Amount"))
+    payment_date = models.DateField(_("Payment Date"), auto_now_add=True)
+    status = models.CharField(_("Status"), max_length=2, choices=PaymentStaus.choices, default=PaymentStaus.PENDING)
 
     def __str__(self) -> str:
-        return f"Payment for {self.user} on {self.payment_date} is in {self.get_status_display()}"
+        return _("Payment for {user} on {date} is {status}").format(user=self.user, date=self.payment_date, status=self.get_status_display())

@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.views.i18n import set_language
 from django.urls import path, include
 
 from .views import DashboardView
@@ -25,4 +26,5 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("bookings/", include("bookings.urls")),
     path("", include("calendarapp.urls")),
+    path('set_language/', set_language, name='set_language')
 ]

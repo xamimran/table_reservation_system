@@ -1,11 +1,12 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}Event List{% endblock title %}
 
 {% block breadcrumb %}
     <div>
-        <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
+        <h1><i class="fa fa-dashboard"></i> {% trans "Dashboard" %}</h1>
         <p>Event List</p>
     </div>
     <ul class="app-breadcrumb breadcrumb">

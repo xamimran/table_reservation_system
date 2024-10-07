@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 
     const userId = userProfileResponse.data.id;
     const formattedReservationDate = formatDate(new Date(date));
-
+console.log("userProfileResponse",userProfileResponse)
     // Step 2: Create a reservation
     let reservationResponse;
     try {
@@ -75,9 +75,9 @@ export async function POST(req: Request) {
         slot_time_id: mealType,
       });
     } catch (error: any) {
-      console.error("Error creating reservation:", error.response?.data);
+      console.error("Error creating reservation:", error.response);
       return NextResponse.json(
-        { error: "Failed to make reservation", details: error.response?.data },
+        { error: "Failed to make reservation", details: error.response },
         { status: 500 }
       );
     }

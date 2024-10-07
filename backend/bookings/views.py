@@ -5,6 +5,8 @@ from django.db.models.functions import Greatest
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from datetime import datetime
+from django.core.serializers import serialize
+from django.http import JsonResponse
 import calendar
 from calendarapp.models import Event
 import pdb
@@ -105,12 +107,17 @@ class TableView(viewsets.ModelViewSet):
                 F('adults') - adults,
                 F('children') - children
             )
-        ).order_by('total_surplus').values_list('table_number', flat=True).first()
-
-        if available_table is not None:
-            return Response({"available_table": available_table})
+        ).order_by('total_surplus').first()
+        if available_table:
+            table_data = {
+                "id": available_table.id,
+                "table_number": available_table.table_number,
+                "adults": available_table.adults,
+                "children": available_table.children
+            }
+            return JsonResponse(table_data)
         else:
-            return Response({"message": "No tables available."})
+            return Response({"message": "No available tables found for the given criteria."}, status=404)
 
 class ReservationView(viewsets.ModelViewSet):
     serializer_class = ReservationSerializer

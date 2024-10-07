@@ -49,6 +49,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -152,6 +153,22 @@ STRIPE_SECRET_KEY = 'sk_test_51Q2M6V1omZnM38gMsZk99Honzma9auS03RUqREwT6TogmTxpvt
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51Q2M6V1omZnM38gMl9s0JnnbyqYKIlNyxNMvFSQp0toPHMUQMiFHDbIcAthMVLgQktbfeOzkRvUL67RZMODHx3Qq00rUbEo8f3'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+LANGUAGES = [
+    ('en', 'English'),
+    ('it', 'Italiano'),
+]
+
+# Set default language
+LANGUAGE_CODE = 'en'
+
+# Enable internationalization and localization
+USE_I18N = True
+USE_L10N = True
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 
 # Email settings (example configuration)
 # DEFAULT_FROM_EMAIL = 'admin@yourdomain.com'

@@ -93,10 +93,6 @@ fieldset.module h2 {
 }
 
 /* Sidebar (side navigation) background */
-#nav-sidebar {
-    background-color: #eab24f !important; /* Sidebar background */
-    color: inherit; /* Keep original text color */
-}
 
 /* Sidebar links (model names) */
 #nav-sidebar a:link, #nav-sidebar a:visited {
@@ -120,4 +116,25 @@ fieldset.module h2 {
 #nav-sidebar .active a:focus, #nav-sidebar .active a:hover {
     background-color: #c9a03e !important; /* Darker yellow on active hover */
     color: inherit; /* Keep original text color */
+}
+
+/* Target the specific element or class */
+#nav-sidebar table caption {
+    background-color: #eab24f !important; /* Yellow background for section headers */
+    color: #fff !important; /* Adjust text color if needed */
+}
+
+#nav-sidebar table a {
+    background-color: transparent !important; /* Keep links transparent */
+    color: inherit !important;
+}
+
+#content-main table caption {
+    background-color: #eab24f !important; /* Yellow background for section headers */
+    color: #fff !important; /* Adjust text color if needed */
+}
+
+#content-main table a {
+    background-color: transparent !important; /* Keep links transparent */
+    color: inherit !important;
 }
