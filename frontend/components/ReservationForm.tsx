@@ -12,15 +12,18 @@ import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import DefaultLoader from "./DefaultLoader";
 import Image from "next/image";
+import { useTranslations } from "@/app/hooks/useTranslations";
+import { useLanguage } from "@/app/contexts/LanguageContext";
 
 const steps = [
-  { title: "Meal Type", icon: "/meal-type.png", component: MealTypeStep },
-  { title: "Party Size", icon: "/party-size.png", component: PartySizeStep },
-  { title: "Date", icon: "/date.png", component: DateStep },
-  { title: "Details", icon: "/details.png", component: CustomerDetailsStep },
+  { title: "mealType", icon: "/meal-type.png", component: MealTypeStep },
+  { title: "partySize", icon: "/party-size.png", component: PartySizeStep },
+  { title: "date", icon: "/date.png", component: DateStep },
+  { title: "details", icon: "/details.png", component: CustomerDetailsStep },
 ];
 
 export default function ReservationForm() {
+  const t = useTranslations();
   const [currentStep, setCurrentStep] = useState(0);
   const [mealType, setMealType] = useState<any>(null);
   const [adults, setAdults] = useState<string>("2");
@@ -162,7 +165,7 @@ export default function ReservationForm() {
   return (
     <div className="max-w-4xl mx-auto mt-4 sm:mt-10 p-4 sm:p-8 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-8 text-center text-gray-800">
-        Table Reservation
+        {t("tableReservation")}
       </h1>
       <div className="mb-4 sm:mb-8">
         <ol className="flex flex-wrap sm:flex-nowrap items-center w-full p-2 sm:p-3 space-x-1 sm:space-x-2 justify-between text-xs sm:text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700">
@@ -195,7 +198,7 @@ export default function ReservationForm() {
                   />
                 )}
               </span>
-              <span className="hidden sm:inline">{step.title}</span>
+              <span className="hidden sm:inline">{t(step.title)}</span>
               {index < steps.length - 1 && (
                 <svg
                   aria-hidden="true"
@@ -237,7 +240,7 @@ export default function ReservationForm() {
               onClick={handlePrevious}
               className="text-base sm:text-lg px-4 sm:px-6 py-2 sm:py-3 w-full sm:w-auto"
             >
-              Previous
+              {t("previous")}
             </Button>
           ) : (
             <div className="hidden sm:block"></div>
@@ -249,7 +252,7 @@ export default function ReservationForm() {
                 onClick={handleAvailability}
                 className="text-base sm:text-lg px-4 sm:px-6 py-2 sm:py-3 w-full sm:w-auto"
               >
-                Check Availability
+                {t("checkAvailability")}{" "}
               </Button>
             )}
             {currentStep < steps.length - 1 ? (
@@ -264,7 +267,7 @@ export default function ReservationForm() {
                 }
                 className="text-base sm:text-lg px-4 sm:px-6 py-2 sm:py-3 w-full sm:w-auto"
               >
-                Next
+                {t("next")}
               </Button>
             ) : (
               <Button
@@ -272,7 +275,8 @@ export default function ReservationForm() {
                 onClick={handleSubmit}
                 className="text-base sm:text-lg px-4 sm:px-6 py-2 sm:py-3 w-full sm:w-auto"
               >
-                Submit Reservation
+                {t("submitReservation")}
+                {/* Submit Reservation */}
               </Button>
             )}
           </div>

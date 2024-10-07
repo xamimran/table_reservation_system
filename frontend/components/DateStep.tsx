@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -15,6 +17,7 @@ import {
   startOfDay,
 } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "@/app/hooks/useTranslations";
 
 interface DateStepProps {
   selectedDate: Date | undefined;
@@ -25,6 +28,7 @@ export default function DateStep({
   selectedDate,
   onDateSelect,
 }: DateStepProps) {
+  const t = useTranslations();
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const bookedSlots = [
@@ -70,7 +74,7 @@ export default function DateStep({
   return (
     <div className="space-y-4">
       <h2 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">
-        Select Date
+        {t("selectDate")}
       </h2>
       <div className="bg-white rounded-lg shadow p-2 sm:p-4">
         <div className="flex justify-between items-center mb-2 sm:mb-4">
@@ -95,12 +99,12 @@ export default function DateStep({
           </Button>
         </div>
         <div className="grid grid-cols-7 gap-1 sm:gap-2">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day) => (
             <div
               key={day}
               className="text-center font-medium text-gray-500 text-xs sm:text-sm"
             >
-              {day}
+              {t(day)}
             </div>
           ))}
           {dates.map((date, i) => {
@@ -128,7 +132,7 @@ export default function DateStep({
                 type="button"
               >
                 <span className="text-xs sm:text-sm">
-                  {format(date, "EEE")}
+                  {t(format(date, "EEEE"))}
                 </span>
                 <span className="text-sm sm:text-lg font-semibold">
                   {format(date, "d")}

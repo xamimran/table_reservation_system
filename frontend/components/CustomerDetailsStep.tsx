@@ -1,6 +1,9 @@
+"use client";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User, Mail, Phone } from "lucide-react";
+import { useTranslations } from "@/app/hooks/useTranslations";
 
 interface CustomerDetailsStepProps {
   customerDetails: {
@@ -25,6 +28,7 @@ export default function CustomerDetailsStep({
   customerDetails,
   setCustomerDetails,
 }: CustomerDetailsStepProps) {
+  const t = useTranslations();
   const details = customerDetails || {
     user_name: "",
     first_name: "",
@@ -37,7 +41,7 @@ export default function CustomerDetailsStep({
   return (
     <div className="space-y-4 sm:space-y-6 h-full sm:h-[500px] overflow-y-auto">
       <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
-        Customer Details
+        {t("customerDetails")}
       </h2>
       <div className="space-y-3 sm:space-y-4">
         <div className="space-y-2">
@@ -46,7 +50,7 @@ export default function CustomerDetailsStep({
             className="text-base sm:text-lg font-medium flex items-center space-x-2"
           >
             <User className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span>First Name</span>
+            <span>{t("firstName")}</span>
           </Label>
           <Input
             id="first_name"
@@ -64,7 +68,7 @@ export default function CustomerDetailsStep({
             className="text-base sm:text-lg font-medium flex items-center space-x-2"
           >
             <User className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span>Last Name</span>
+            <span>{t("lastName")}</span>
           </Label>
           <Input
             id="last_name"
@@ -82,7 +86,7 @@ export default function CustomerDetailsStep({
             className="text-base sm:text-lg font-medium flex items-center space-x-2"
           >
             <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span>Email</span>
+            <span>{t("email")}</span>
           </Label>
           <Input
             id="email"
@@ -101,7 +105,7 @@ export default function CustomerDetailsStep({
             className="text-base sm:text-lg font-medium flex items-center space-x-2"
           >
             <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span>Phone</span>
+            <span>{t("phone")}</span>
           </Label>
           <Input
             id="phone"

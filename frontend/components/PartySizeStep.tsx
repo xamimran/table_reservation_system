@@ -1,3 +1,5 @@
+"use client";
+
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -7,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Image from "next/image";
+import { useTranslations } from "@/app/hooks/useTranslations";
 
 interface PartySizeStepProps {
   adults: string;
@@ -21,6 +24,7 @@ export default function PartySizeStep({
   children,
   setChildren,
 }: PartySizeStepProps) {
+  const t = useTranslations();
   const maxChildren = parseInt(adults) - 1;
   const childrenOptions = Array.from(
     { length: maxChildren >= 0 ? maxChildren + 1 : 1 },
@@ -29,7 +33,7 @@ export default function PartySizeStep({
 
   return (
     <div className="space-y-4 sm:space-y-6 h-full sm:h-[400px]">
-      <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Party Size</h2>
+      <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">{t("partySize")}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <div className="space-y-2">
           <Label
@@ -38,11 +42,11 @@ export default function PartySizeStep({
           >
             <Image
               src="/party-size.png"
-              alt="/party-size.png"
+              alt={t("adults")}
               width="20"
               height="20"
             />
-            <span>Adults</span>
+            <span>{t("adults")}</span>
           </Label>
           <Select
             value={adults}
@@ -55,7 +59,7 @@ export default function PartySizeStep({
               id="adults"
               className="w-full text-base sm:text-lg p-2 sm:p-3"
             >
-              <SelectValue placeholder="Select number of adults" />
+              <SelectValue placeholder={t("selectNumberOfAdults")} />
             </SelectTrigger>
             <SelectContent>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
@@ -77,18 +81,18 @@ export default function PartySizeStep({
           >
             <Image
               src="/party-size.png"
-              alt="/party-size.png"
+              alt={t("children")}
               width="20"
               height="20"
             />
-            <span>Children</span>
+            <span>{t("children")}</span>
           </Label>
           <Select value={children} onValueChange={setChildren}>
             <SelectTrigger
               id="children"
               className="w-full text-base sm:text-lg p-2 sm:p-3"
             >
-              <SelectValue placeholder="Select number of children" />
+              <SelectValue placeholder={t("selectNumberOfChildren")} />
             </SelectTrigger>
             <SelectContent>
               {childrenOptions.map((num) => (
@@ -107,14 +111,12 @@ export default function PartySizeStep({
       <p className="text-base sm:text-lg flex items-center space-x-2 bg-yellow-50 border-[#eab24f] p-3 sm:p-4 rounded-md border text-[#eab24f]">
         <Image
           src="/party-size.png"
-          alt="/party-size.png"
+          alt={t("partySize")}
           width="28"
           height="28"
         />
         <span>
-          <strong>{adults}</strong> {adults === "1" ? "adult" : "adults"} and{" "}
-          <strong>{children}</strong> {children === "1" ? "child" : "children"}{" "}
-          are selected for your party.
+          {t("partySizeMessage", { adults, children })}
         </span>
       </p>
     </div>
