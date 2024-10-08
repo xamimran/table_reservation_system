@@ -61,7 +61,6 @@ export async function POST(req: Request) {
 
     const userId = userProfileResponse.data.id;
     const formattedReservationDate = formatDate(new Date(date));
-console.log("userProfileResponse",userProfileResponse)
     // Step 2: Create a reservation
     let reservationResponse;
     try {
@@ -71,7 +70,7 @@ console.log("userProfileResponse",userProfileResponse)
         payment_status: false,
         no_show: false,
         user_id: userId,
-        table_id: tableData,
+        table_id: tableData?.id,
         slot_time_id: mealType,
       });
     } catch (error: any) {
@@ -91,7 +90,7 @@ console.log("userProfileResponse",userProfileResponse)
         status: "P",
         user: userId,
         reservation_id: reservationResponse.data.id,
-        table_id: tableData,
+        table_id: tableData?.id,
       });
 
       const paymentId = paymentResponse.data.id; // Assuming the API returns the created payment's ID
@@ -122,7 +121,7 @@ console.log("userProfileResponse",userProfileResponse)
           adults: adults.toString(),
           children: children.toString(),
           date: date,
-          table_id: tableData,
+          table_id: tableData?.id,
           meal_type: mealType,
           payment_id: paymentId, // Add the payment ID to the metadata
         },

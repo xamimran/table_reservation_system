@@ -105,9 +105,9 @@ export default function ReservationForm() {
         month: "long",
         day: "numeric",
       });
-      if (response.data.data.available_table) {
-        setTableData(response.data.data.available_table);
-        const tableNumber = response.data.data.available_table;
+      if (response.data.data) {
+        setTableData(response.data.data);
+        const tableNumber = response.data.data.table_number;
 
         toast({
           title: `Table No. ${tableNumber} is Available`,
