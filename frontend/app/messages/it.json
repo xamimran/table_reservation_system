@@ -26,12 +26,12 @@
   "selectNumberOfChildren": "Seleziona il numero di bambini",
   "Lunch":"Pranzo",
   "Dinner":"Cena",
-  "Monday" : "Lunedi" ,
-  "Tuesday" : "Martedi" ,
-  "Wednesday" : "Mercoledi" ,
-  "Thursday" : "Giovedi" ,
-  "Friday" : "Venerdi",
-  "Saturday" : "Sabato" ,
-  "Sunday" : "Domenica"
+  "Monday" : "Lun" ,
+  "Tuesday" : "Mart" ,
+  "Wednesday" : "Mer" ,
+  "Thursday" : "Giov" ,
+  "Friday" : "Ven",
+  "Saturday" : "Sab" ,
+  "Sunday" : "Dom"
   
 }
