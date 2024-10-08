@@ -48,9 +48,18 @@ export async function POST(req: Request) {
       data: response.data,
     });
   } catch (error: any) {
-    console.error("Error fetching the table:", error.message);
+  
+    // Check if the error response exists and extract the message
+    if (error.response && error.response.data && error.response.data.message) {
+      return NextResponse.json(
+        { message: error.response.data.message },
+        { status: error.response.status }
+      );
+    }
+  
+    // Fallback for any other errors
     return NextResponse.json(
-      { error: "Failed to fetch table data" },
+      { message: "An unexpected error occurred while fetching the table." },
       { status: 500 }
     );
   }

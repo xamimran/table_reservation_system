@@ -91,38 +91,47 @@ export default function ReservationForm() {
   };
 
   const handleAvailability = async () => {
-    const response = await axios.post("/api/get-table", {
-      selectedDate: date,
-      mealType: mealType,
-      adults: adults,
-      children: children,
-    });
-    const newdate = date ? new Date(date) : new Date();
-    const formattedDate = newdate.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    if (response.data.data.available_table) {
-      setTableData(response.data.data.available_table);
-      const tableNumber = response.data.data.available_table;
-
-      toast({
-        title: `Table No. ${tableNumber} is Available`,
-        description: `Scheduled on ${formattedDate}.`,
-        duration: 1000,
+    try {
+      const response = await axios.post("/api/get-table", {
+        selectedDate: date,
+        mealType: mealType,
+        adults: adults,
+        children: children,
       });
+      const newdate = date ? new Date(date) : new Date();
+      const formattedDate = newdate.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      if (response.data.data.available_table) {
+        setTableData(response.data.data.available_table);
+        const tableNumber = response.data.data.available_table;
 
-      setIsTableAvailable(true);
-    } else {
+        toast({
+          title: `Table No. ${tableNumber} is Available`,
+          description: `Scheduled on ${formattedDate}.`,
+          duration: 1000,
+        });
+
+        setIsTableAvailable(true);
+      } else {
+        toast({
+          variant: "destructive",
+          title: `Uh oh! ${response.data.data.message}.`,
+          description: `No table available on : ${formattedDate}`,
+          duration: 1000,
+        });
+        setIsTableAvailable(false);
+      }
+    } catch (error: any) {
       toast({
         variant: "destructive",
-        title: `Uh oh! ${response.data.data.message}.`,
-        description: `No table available on : ${formattedDate}`,
-        duration: 1000,
+        title: `Uh oh! ${error.response.data.message}.`,
+        // description: `No table available on : ${formattedDate}`,
+        duration: 3000,
       });
-      setIsTableAvailable(false);
     }
   };
 
