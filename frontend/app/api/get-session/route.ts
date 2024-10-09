@@ -23,53 +23,61 @@ type PaymentStatus = "PA" | "F" | "P";
 export async function GET(req: NextRequest) {
   console.log("GET /api/get-session - Start");
   const { searchParams } = new URL(req.url);
-  const sessionId = searchParams.get("session_id");
+  const paymentMethodId = searchParams.get("payment_method_id");
+  const customerId = searchParams.get("customer_id");
+  const paymentId = searchParams.get("payment_id");
+  const userId = searchParams.get("user_id");
+  const reservationId = searchParams.get("reservation_id");
 
-  if (!sessionId) {
-    console.error("Session ID is missing in the request");
+  if (
+    !paymentMethodId ||
+    !customerId ||
+    !paymentId ||
+    !userId ||
+    !reservationId
+  ) {
+    console.error("Required parameters are missing in the request");
     return NextResponse.json(
-      { error: "Session ID is required" },
+      { error: "Required parameters are missing" },
       { status: 400 }
     );
   }
 
   try {
-    console.log("Retrieving Stripe session");
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    // Instead of creating a PaymentIntent, we'll check if the card is valid
+    const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
 
     let status: PaymentStatus;
     let link: string;
 
-    // Map Stripe payment status to our application status
-    switch (session.payment_status) {
-      case "paid":
-        status = "PA"; // 'PA' for paid
-        link = `${req.headers.get("origin")}/success?session_id=${session.id}`;
-        break;
-      case "unpaid":
-      case "no_payment_required":
-        status = "F"; // 'F' for failed
-        link = `${req.headers.get("origin")}/failed?session_id=${session.id}`;
-        break;
-      default:
-        status = "P"; // 'P' for pending
-        link = `${req.headers.get("origin")}/pending?session_id=${session.id}`;
+    // If we can retrieve the payment method, we consider it successful
+    if (paymentMethod) {
+      status = "PA"; // 'PA' for paid (in this case, it means the card was successfully saved)
+      link = `/success?payment_method=${paymentMethodId}`; // Remove req.headers.get("origin")
+    } else {
+      status = "F"; // 'F' for failed
+      link = `/canceled?payment_method=${paymentMethodId}`; // Remove req.headers.get("origin")
     }
 
-    console.log(`Payment status mapped to: ${status}`);
+    console.log(`Card save status mapped to: ${status}`);
 
     if (BACKEND_URL) {
       try {
         if (status === "F") {
-          // Delete associated records if payment failed
-          if (session.metadata) {
-            await deleteAssociatedRecords(session.metadata);
-          } else {
-            console.warn("Session metadata is null, skipping record deletion");
-          }
+          // Delete associated records if card save failed
+          await deleteAssociatedRecords({
+            payment_id: paymentId,
+            reservation_id: reservationId,
+            user_id: userId,
+          });
         } else {
           // Update reservation and payment status
-          await updateReservationAndPayment(session, status);
+          await updateReservationAndPayment(
+            { payment_id: paymentId, reservation_id: reservationId },
+            status,
+            paymentMethodId,
+            customerId
+          );
         }
       } catch (error: any) {
         console.error(
@@ -85,7 +93,7 @@ export async function GET(req: NextRequest) {
 
     console.log("GET /api/get-session - End");
     return NextResponse.json({
-      ...session,
+      paymentMethod,
       applicationStatus: status,
       applicationLink: link,
     });
@@ -96,19 +104,16 @@ export async function GET(req: NextRequest) {
 }
 
 async function updateReservationAndPayment(
-  session: Stripe.Checkout.Session,
-  status: PaymentStatus
+  metadata: { reservation_id: string; payment_id: string },
+  status: PaymentStatus,
+  paymentMethodId: any,
+  customerId: any
 ) {
-  if (!session.metadata) {
-    console.warn("Session metadata is null, skipping updates");
-    return;
-  }
-
-  const reservationId = session.metadata.reservation_id;
-  const paymentId = session.metadata.payment_id;
+  const reservationId = metadata.reservation_id;
+  const paymentId = metadata.payment_id;
 
   if (!reservationId || !paymentId) {
-    console.warn("Missing reservation_id or payment_id in session metadata");
+    console.warn("Missing reservation_id or payment_id in metadata");
     return;
   }
 
@@ -126,13 +131,19 @@ async function updateReservationAndPayment(
     `${BACKEND_URL}/payment/${paymentId}/`,
     {
       status: status,
+      stripe_payment_id: paymentMethodId,
+      description: customerId,
     }
   );
   console.log("Payment update response:", paymentResponse.data);
 }
 
-async function deleteAssociatedRecords(metadata: Stripe.Metadata) {
-  console.log("Deleting associated records for failed payment");
+async function deleteAssociatedRecords(metadata: {
+  payment_id: string;
+  reservation_id: string;
+  user_id: string;
+}) {
+  console.log("Deleting associated records for failed card save");
 
   // Delete payment record
   if (metadata.payment_id) {
