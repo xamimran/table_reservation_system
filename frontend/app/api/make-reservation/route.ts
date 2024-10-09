@@ -94,47 +94,19 @@ export async function POST(req: Request) {
       });
 
       const paymentId = paymentResponse.data.id; // Assuming the API returns the created payment's ID
-
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-        line_items: [
-          {
-            price: PRODUCT_ID,
-            quantity: 1,
-          },
-        ],
-        mode: "payment",
-        success_url: `${req.headers.get(
-          "origin"
-        )}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${req.headers.get(
-          "origin"
-        )}/canceled?session_id={CHECKOUT_SESSION_ID}`,
-        customer_email: customerDetails.email,
-        metadata: {
-          reservation_id: reservationResponse.data.id,
-          user_id: userId,
-          first_name: customerDetails.first_name,
-          last_name: customerDetails.last_name,
-          phone: customerDetails.phone,
-          user_notes: customerDetails.user_notes,
-          adults: adults.toString(),
-          children: children.toString(),
-          date: date,
-          table_id: tableData?.id,
-          meal_type: mealType,
-          payment_id: paymentId, // Add the payment ID to the metadata
-        },
-      });
-      await axios.patch(`${backendUrl}/payment/${paymentId}/`, {
-        amount: session.amount_total,
-        stripe_payment_id: session.id,
+      const customer = await stripe.customers.create({ email });
+      const setupIntent = await stripe.setupIntents.create({
+        customer: customer.id,
+        payment_method_types: ['card'],
       });
 
       return NextResponse.json({
         message: `Reservation created successfully for date: ${formattedReservationDate}`,
         reservationId: reservationResponse.data.id,
-        paymentUrl: session.url,
+        clientSecret: setupIntent.client_secret,
+        customerId: customer.id,
+        paymentId: paymentId,
+        userId:userId
       });
     } catch (error: any) {
       console.error("Error creating Stripe session:", error);
