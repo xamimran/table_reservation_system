@@ -8,36 +8,36 @@ export default function SuccessPage() {
   const router = useRouter();
   const [sessionData, setSessionData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const session_id = params.get("session_id");
+  const [loading, setLoading] = useState<boolean>(false);
+  // useEffect(() => {
+  //   const params = new URLSearchParams(window.location.search);
+  //   const session_id = params.get("session_id");
 
-    if (session_id) {
-      // console.log("Fetching session data for ID:", session_id);
-      fetch(`/api/get-session?session_id=${session_id}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          // console.log("Session data received:", data);
-          setSessionData(data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Error fetching session data:", err);
-          setError(err.message);
-          setLoading(false);
-        });
-    } else {
-      console.error("No session ID provided in URL");
-      setError("No session ID provided");
-      setLoading(false);
-    }
-  }, []);
+  //   if (session_id) {
+  //     // console.log("Fetching session data for ID:", session_id);
+  //     fetch(`/api/get-session?session_id=${session_id}`)
+  //       .then((response) => {
+  //         if (!response.ok) {
+  //           throw new Error(`HTTP error! status: ${response.status}`);
+  //         }
+  //         return response.json();
+  //       })
+  //       .then((data) => {
+  //         // console.log("Session data received:", data);
+  //         setSessionData(data);
+  //         setLoading(false);
+  //       })
+  //       .catch((err) => {
+  //         console.error("Error fetching session data:", err);
+  //         setError(err.message);
+  //         setLoading(false);
+  //       });
+  //   } else {
+  //     console.error("No session ID provided in URL");
+  //     setError("No session ID provided");
+  //     setLoading(false);
+  //   }
+  // }, []);
 
   const truncateSessionId = (id: string) => {
     if (id.length > 20) {
@@ -104,16 +104,16 @@ export default function SuccessPage() {
             </p> */}
             <p className="text-gray-700">
               <span className="font-semibold">Payment Status:</span>{" "}
-              {sessionData.payment_status}
+              {sessionData?.payment_status}
             </p>
             <p className="text-gray-700">
               <span className="font-semibold">Amount Total:</span>{" "}
-              {sessionData.amount_total / 100}{" "}
-              {sessionData.currency.toUpperCase()}
+              {sessionData?.amount_total / 100}{" "}
+              {sessionData?.currency.toUpperCase()}
             </p>
             <p className="text-gray-700 break-words">
               <span className="font-semibold">Customer Email: </span>
-              <span className="text-sm">{sessionData.customer_email}</span>
+              <span className="text-sm">{sessionData?.customer_email}</span>
             </p>
           </div>
         )}

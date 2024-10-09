@@ -9,31 +9,31 @@ export default function FailedPage() {
   const router = useRouter();
   const [sessionData, setSessionData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const session_id = params.get('session_id');
+  // useEffect(() => {
+  //   const params = new URLSearchParams(window.location.search);
+  //   const session_id = params.get('session_id');
 
-    if (session_id) {
-      fetch(`/api/get-session?session_id=${session_id}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to fetch session data');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("data----------------",data);
-          setSessionData(data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          setError(err.message);
-          setLoading(false);
-        });
-    }
-  }, []);
+  //   if (session_id) {
+  //     fetch(`/api/get-session?session_id=${session_id}`)
+  //       .then((response) => {
+  //         if (!response.ok) {
+  //           throw new Error('Failed to fetch session data');
+  //         }
+  //         return response.json();
+  //       })
+  //       .then((data) => {
+  //         console.log("data----------------",data);
+  //         setSessionData(data);
+  //         setLoading(false);
+  //       })
+  //       .catch((err) => {
+  //         setError(err.message);
+  //         setLoading(false);
+  //       });
+  //   }
+  // }, []);
 
   const truncateSessionId = (id: string) => {
     if (id.length > 20) {

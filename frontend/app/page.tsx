@@ -25,7 +25,7 @@ export default function Home() {
           </div>
           <Elements stripe={stripePromise}>
             <ReservationForm />
-          </Elements>{" "}
+          </Elements>
         </LanguageProvider>
       </main>
     </div>
