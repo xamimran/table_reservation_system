@@ -222,6 +222,7 @@ export default function ReservationForm() {
           onSuccess={handleCardSaved}
           clientSecret={clientSecret}
           customerId={customerId}
+          customerDetails={customerDetails}
         />
       ) : (
         <div className="max-w-4xl mx-auto mt-4 sm:mt-10 p-4 sm:p-8 bg-white rounded-lg shadow-lg">

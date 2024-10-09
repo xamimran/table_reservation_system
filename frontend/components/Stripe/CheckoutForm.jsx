@@ -22,10 +22,10 @@ const CARD_ELEMENT_OPTIONS = {
   hidePostalCode: true,
 };
 
-export default function CheckoutForm({ onSuccess,clientSecret,customerId }) {
+export default function CheckoutForm({ onSuccess,clientSecret,customerId ,customerDetails}) {
   const stripe = useStripe();
   const elements = useElements();
-  const [email, setEmail] = useState("junaid@gmail.com");
+  const [email, setEmail] = useState(customerDetails?.email);
   const [cardholderName, setCardholderName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
