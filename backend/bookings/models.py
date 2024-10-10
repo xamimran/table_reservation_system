@@ -41,11 +41,10 @@ class Table(models.Model):
 class Reservation(models.Model):
     user_id = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
     table_id = models.ForeignKey(Table, verbose_name=_("Table"), on_delete=models.CASCADE)
-    description = models.TextField(_("Description"), max_length=50)
     reservation_date = models.DateTimeField(_("Reservation Date"))
     payment_status = models.BooleanField(_("Payment Status"), default=False)
     slot_time_id = models.ForeignKey(MealSlotTime, verbose_name=_("Meal Slot"), on_delete=models.CASCADE, default=0)
-    no_show = models.BooleanField(_("No Show"), default=False)
+    no_show = models.BooleanField(_('No Show'), default=False)
 
     def __str__(self) -> str:
         return _("Reservation for {user} on {date}").format(user=self.user_id, date=self.reservation_date)
@@ -121,9 +120,10 @@ class Payment(models.Model):
     reservation_id = models.ForeignKey(Reservation, verbose_name=_("Reservation"), on_delete=models.CASCADE)
     description = models.CharField(_("Description"), max_length=50)
     table_id = models.ForeignKey(Table, verbose_name=_("Table"), on_delete=models.CASCADE)
-    stripe_payment_id = models.TextField(_("Stripe Payment ID"))
+    stripe_payment_id = models.CharField(_("Stripe Payment ID"),max_length=100)
     amount = models.IntegerField(_("Amount"))
     payment_date = models.DateField(_("Payment Date"), auto_now_add=True)
+    customer_id = models.CharField(_("Customer ID"),max_length=100, null=True, blank=True)
     status = models.CharField(_("Status"), max_length=2, choices=PaymentStaus.choices, default=PaymentStaus.PENDING)
 
     def __str__(self) -> str:

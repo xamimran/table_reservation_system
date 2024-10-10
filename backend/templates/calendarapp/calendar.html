@@ -149,8 +149,8 @@
             .then(response => response.json())
             .then(data => {
                 const firstProfile = data[0];
-                const emoji = '🌞';
-                const userProfile = `${firstProfile.first_name} ${emoji}`;
+                const lang = localStorage.getItem('preferredLanguage')
+                const userProfile = `${firstProfile.first_name}`;
                 
                 // Fetch table availability data for the current month and year
                 fetch(`http://127.0.0.1:8000/bookings/table/check_month_availability/?month=${month}&year=${year}`)
@@ -186,11 +186,11 @@
                                 // Access reserved and available tables using the formatted date
                                 const reservedTables = availabilityData.reserved_tables_by_day[formattedDate] || 0;
                                 const availableTables = availabilityData.available_tables_by_day[formattedDate] || 0;
-
+                                let reservedTableLabel = lang == 'it' ? 'Tavoli riservati' : 'Reserved Table'
                                 // Calculate total tables (assuming total = reserved + available)
                                 const totalTables = reservedTables + availableTables;
 
-                                let availabilityInfo = `Reserved Tables: ${reservedTables}`;
+                                let availabilityInfo = `${reservedTableLabel}: ${reservedTables}`;
 
                                 return {
                                     html: `
@@ -228,7 +228,7 @@
                             editable: true,
                             dayMaxEvents: true
                         });
-
+                        calendar.setOption('locale',lang);
                         calendar.render();
                     })
                     .catch(error => {

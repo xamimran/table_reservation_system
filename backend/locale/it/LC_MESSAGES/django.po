@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-07 12:33-0700\n"
+"POT-Creation-Date: 2024-10-10 00:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: accounts/apps.py:6 accounts/apps.py:7
+msgid "Accounts"
+msgstr "Conti"
 
 #: accounts/models/user.py:49
 msgid "Email Address"
@@ -58,11 +62,25 @@ msgstr "Telefono"
 msgid "User Notes"
 msgstr "Note ospite"
 
-#: bookings/apps.py:8
-#, fuzzy
-#| msgid "Last Name"
-msgid "Resturant Name"
-msgstr "Cognome"
+#: bookings/admin.py:40
+msgid "No show "
+msgstr "Nessuno spettacolo"
+
+#: bookings/admin.py:42
+msgid "Nessuno spettacolo"
+msgstr ""
+
+#: bookings/admin.py:47 bookings/models.py:29
+msgid "Table Number"
+msgstr "Numero di tavolo"
+
+#: bookings/admin.py:52
+msgid "Meal Type"
+msgstr "Tipo di pasto"
+
+#: bookings/apps.py:8 bookings/apps.py:9
+msgid "Bookings"
+msgstr "Prenotazioni"
 
 #: bookings/models.py:18
 msgid "Slot Name"
@@ -88,10 +106,6 @@ msgstr "Pasto"
 msgid "Meals Time"
 msgstr "Pasto"
 
-#: bookings/models.py:29
-msgid "Table Number"
-msgstr "Numero di tavolo"
-
 #: bookings/models.py:30
 msgid "Available"
 msgstr "Disponibile"
@@ -104,7 +118,7 @@ msgstr "Adulte"
 msgid "Children"
 msgstr "Bambini"
 
-#: bookings/models.py:38 bookings/models.py:43 bookings/models.py:123
+#: bookings/models.py:38 bookings/models.py:43 bookings/models.py:122
 msgid "Table"
 msgstr "Tavoli"
 
@@ -114,53 +128,49 @@ msgstr "Tavoli"
 msgid "Tables List"
 msgstr "Tavolo da tavola"
 
-#: bookings/models.py:42 bookings/models.py:120
+#: bookings/models.py:42 bookings/models.py:119
 msgid "User"
 msgstr "Utenti"
 
-#: bookings/models.py:44 bookings/models.py:122
-msgid "Description"
-msgstr "Descrizione"
-
-#: bookings/models.py:45
+#: bookings/models.py:44
 msgid "Reservation Date"
 msgstr "Data prenotazione"
 
-#: bookings/models.py:46
+#: bookings/models.py:45
 msgid "Payment Status"
 msgstr "Stato del pagamento"
 
-#: bookings/models.py:47
+#: bookings/models.py:46
 msgid "Meal Slot"
 msgstr "Pasto"
 
-#: bookings/models.py:48
+#: bookings/models.py:47
 msgid "No Show"
 msgstr "No show"
 
-#: bookings/models.py:51
+#: bookings/models.py:50
 #, python-brace-format
 msgid "Reservation for {user} on {date}"
 msgstr ""
 
-#: bookings/models.py:54 bookings/models.py:121
+#: bookings/models.py:53 bookings/models.py:120
 msgid "Reservation"
 msgstr "Tavolo"
 
-#: bookings/models.py:55
+#: bookings/models.py:54
 msgid "Reservation List"
 msgstr "Lista di prenotazioni"
 
-#: bookings/models.py:60
+#: bookings/models.py:59
 #, python-brace-format
 msgid "Cannot reserve a table on {date} because there is an event scheduled."
 msgstr ""
 
-#: bookings/models.py:73
+#: bookings/models.py:72
 msgid "Your Reservation Confirmation at Fine Table"
 msgstr ""
 
-#: bookings/models.py:74
+#: bookings/models.py:73
 #, python-brace-format
 msgid ""
 "\n"
@@ -186,33 +196,43 @@ msgid ""
 "        "
 msgstr ""
 
-#: bookings/models.py:115
+#: bookings/models.py:114
 msgid "Pending"
 msgstr ""
 
-#: bookings/models.py:116
+#: bookings/models.py:115
 msgid "Paid"
 msgstr ""
 
-#: bookings/models.py:117
+#: bookings/models.py:116
 msgid "Failed"
 msgstr ""
 
-#: bookings/models.py:124
+#: bookings/models.py:121
+msgid "Description"
+msgstr "Descrizione"
+
+#: bookings/models.py:123
 msgid "Stripe Payment ID"
-msgstr ""
+msgstr "ID pagamento Stripe"
+
+#: bookings/models.py:124
+msgid "Amount"
+msgstr "Quantità"
 
 #: bookings/models.py:125
-msgid "Amount"
-msgstr ""
+msgid "Payment Date"
+msgstr "Data di pagamento"
 
 #: bookings/models.py:126
-msgid "Payment Date"
-msgstr ""
+#, fuzzy
+#| msgid "CustomerName"
+msgid "Customer ID"
+msgstr "Customer ID"
 
 #: bookings/models.py:127
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: bookings/models.py:130
 #, python-brace-format
@@ -1442,15 +1462,23 @@ msgstr ""
 msgid "Table Suite"
 msgstr "Tavolo da tavola"
 
-#: templates/base/base.html:74 templates/calendarapp/dashboard.html:9
+#: templates/base/base.html:55
+msgid "Developed BY"
+msgstr "Sviluppato da"
+
+#: templates/base/base.html:61 templates/calendarapp/dashboard.html:9
 #: templates/calendarapp/dashboard.html:13
 #: templates/calendarapp/events_list.html:9
 msgid "Dashboard"
 msgstr "Pannello di controllo"
 
-#: templates/base/base.html:77
+#: templates/base/base.html:64 templates/calendarapp/calendar.html:12
 msgid "Calendar"
 msgstr "Calendario"
+
+#: templates/calendarapp/calendar.html:13
+msgid "Event Calendar"
+msgstr "Calendario degli eventi"
 
 #: templates/calendarapp/calendar.html:27
 msgid "Unavailabilities"
@@ -1482,11 +1510,15 @@ msgstr "Nome ospite"
 msgid "ReservationDate"
 msgstr "Data prenotazione"
 
-msgid "Developed BY"
-msgstr "Sviluppato da"
+#, fuzzy
+#~| msgid "No Show"
+#~ msgid "Display No Show"
+#~ msgstr "No show"
 
-msgid "Event Calendar"
-msgstr "Calendario degli eventi"
+#, fuzzy
+#~| msgid "Last Name"
+#~ msgid "Resturant Name"
+#~ msgstr "Cognome"
 
 #, fuzzy
 #~| msgid "Table"
@@ -1502,6 +1534,3 @@ msgstr "Calendario degli eventi"
 #~| msgid "Meal Slot"
 #~ msgid "Meal Slot Times"
 #~ msgstr "Disponibilità orari"
-
-msgid "Meal Type"
-msgstr "Tipo di pasto"

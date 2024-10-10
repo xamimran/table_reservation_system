@@ -37,7 +37,9 @@ class ReservationAdmin(admin.ModelAdmin):
     list_filter = ['reservation_date', 'no_show']
 
     def display_no_show(self, obj):
-        return "No show " if obj.no_show else ""
+        return _("No show ") if obj.no_show else ""
+    
+    display_no_show.short_description = _('Nessuno spettacolo')
     
     def get_table_number(self, obj):
         return obj.table_id.table_number
@@ -64,7 +66,7 @@ class PaymentAdmin(admin.ModelAdmin):
     # Custom method to link to Stripe Payment
     def stripe_payment(self, obj):
         if obj.stripe_payment_id:
-            return format_html(f'<a href="https://dashboard.stripe.com/test/payments/{obj.stripe_payment_id}" target="_blank">View Payment</a>')
+            return format_html(f'<a href="https://dashboard.stripe.com/test/customer/{obj.customer_id}" target="_blank">View Payment</a>')
         return format_html(f'<a class="button" href="/admin/make_payment/{obj.id}/">Make Payment</a>')
 
     stripe_payment.short_description = 'Stripe Payment'
@@ -99,4 +101,4 @@ class PaymentAdmin(admin.ModelAdmin):
         return redirect(f'/admin/app_name/payment/{payment.id}/change/')
 
 admin.site.unregister(Group)
-admin.site.unregister(Payment)
+# admin.site.unregister(Payment)

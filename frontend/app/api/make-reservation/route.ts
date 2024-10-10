@@ -65,7 +65,6 @@ export async function POST(req: Request) {
     let reservationResponse;
     try {
       reservationResponse = await axios.post(`${backendUrl}/reservation/`, {
-        description: "Reserve this table",
         reservation_date: formattedReservationDate,
         payment_status: false,
         no_show: false,

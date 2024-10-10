@@ -16,11 +16,19 @@
 
 {% block nav-global %}
     <!-- Language Switcher Form -->
-    <form action="{% url 'set_language' %}" method="post">
+    <form action="{% url 'set_language' %}" method="post" onsubmit="saveLanguage();">
         {% csrf_token %}
-        <select name="language" onchange="this.form.submit()">
+        <select name="language" onchange="this.form.submit(); saveLanguage();">
             <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
             <option value="it" {% if LANGUAGE_CODE == 'it' %}selected{% endif %}>Italiano</option>
         </select>
     </form>
+    
+    <script>
+    function saveLanguage() {
+        const language = document.querySelector('select[name="language"]').value;
+        localStorage.setItem('preferredLanguage', language);
+    }
+    </script>
+    
 {% endblock %}
