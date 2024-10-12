@@ -49,19 +49,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         _("Email Address"),
         max_length=255,
         help_text=_("Ex: example@example.com"),
+        unique=True
     )
     is_staff = models.BooleanField(_("Staff status"), default=False)
     is_active = models.BooleanField(_("Active"), default=True)
     date_joined = models.DateTimeField(_("Date Joined"), auto_now_add=True)
     last_updated = models.DateTimeField(_("Last Updated"), auto_now=True)
-    first_name = models.CharField(_("First Name"), max_length=50)  # Add _() here
-    last_name = models.CharField(_("Last Name"), max_length=50)    # Add _() here
-    phone = models.CharField(_("Phone"),max_length=12)
-    user_notes = models.TextField(_("User Notes"))
+    first_name = models.CharField(_("First Name"), max_length=50, null=True)  # Add _() here
+    last_name = models.CharField(_("Last Name"), max_length=50, null=True)    # Add _() here
+    phone = models.CharField(_("Phone"),max_length=12, null=True)
+    user_notes = models.TextField(_("User Notes"), null=True, blank=True)
 
     objects = UserManager()
 
-    USERNAME_FIELD = "id"
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):

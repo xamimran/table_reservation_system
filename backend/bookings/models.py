@@ -10,7 +10,13 @@ from calendarapp.models import Event
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 
-class UserProfile(User):
+class UserProfile(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    email = models.EmailField(max_length=255, unique=False, null=True, blank=True)
+    first_name = models.CharField(_("First Name"), max_length=50, null=True, blank=True)
+    last_name = models.CharField(_("Last Name"), max_length=50, null=True, blank=True)
+    phone = models.CharField(_("Phone"), max_length=12, null=True, blank=True)
+    user_notes = models.TextField(_("User Notes"), null=True, blank=True)
     def __str__(self) -> str:
         return f"(id: {self.id}) {self.first_name} {self.last_name}"
 

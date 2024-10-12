@@ -10,12 +10,13 @@ from .models import UserProfile, MealSlotTime, Table, Reservation, Payment
 
 admin.site.site_header = "Fine Table"
 # Register your models here.
-# @admin.register(UserProfile)
-# class UserProfileAdmin(admin.ModelAdmin):
-#     fields = ['first_name', 'last_name', 'email','phone', 'user_notes']
-#     list_display = ['first_name', 'last_name', 'email', 'phone', 'user_notes']
-#     search_fields = ['first_name', 'last_name', 'email']
-#     list_filter = ['first_name', 'last_name', 'email', 'phone', 'user_notes']
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    # fields = ['first_name', 'last_name', 'duplicate_email','phone', 'user_notes']
+    list_display = ['first_name', 'email', 'last_name', 'phone', 'user_notes']
+    search_fields = ['first_name', 'last_name', 'email']
+    list_filter = ['first_name', 'last_name', 'phone', 'user_notes']
+    # exclude = ('is_staff', "is_active", "date_joined", "last_login", "password", "groups", "user_permissions", "is_superuser", 'email')
 
 #     def save_model(self, request, obj, form, change):
 #         if not obj.username: 
