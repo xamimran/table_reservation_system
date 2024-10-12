@@ -137,7 +137,6 @@ class PaymentView(viewsets.ModelViewSet):
 
 @csrf_exempt
 def process_stripe_payment(request, payment_id):
-    pdb.set_trace()
     if request.method == 'POST':
         payment = get_object_or_404(Payment, id=payment_id)
         try:

@@ -131,8 +131,8 @@ async function updateReservationAndPayment(
     `${BACKEND_URL}/payment/${paymentId}/`,
     {
       status: status,
-      stripe_payment_id: paymentMethodId,
-      description: customerId,
+      payment_method_id: paymentMethodId,
+      customer_id: customerId,
     }
   );
   console.log("Payment update response:", paymentResponse.data);

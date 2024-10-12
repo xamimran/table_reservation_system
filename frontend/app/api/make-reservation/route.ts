@@ -84,7 +84,7 @@ export async function POST(req: Request) {
     try {
       const paymentResponse = await axios.post(`${backendUrl}/payment/`, {
         description: `Payment for reservation ${reservationResponse.data.id}`,
-        stripe_payment_id: "1234", // You might want to generate this dynamically
+        payment_method_id: "1234", // You might want to generate this dynamically
         amount: 0, // We'll update this after creating the session
         status: "P",
         user: userId,
