@@ -5,20 +5,18 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from accounts.models import User
 from calendarapp.models import Event
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 
 class UserProfile(models.Model):
-    id = models.BigAutoField(primary_key=True)
     email = models.EmailField(max_length=255, unique=False, null=True, blank=True)
     first_name = models.CharField(_("First Name"), max_length=50, null=True, blank=True)
     last_name = models.CharField(_("Last Name"), max_length=50, null=True, blank=True)
     phone = models.CharField(_("Phone"), max_length=12, null=True, blank=True)
     user_notes = models.TextField(_("User Notes"), null=True, blank=True)
     def __str__(self) -> str:
-        return f"(id: {self.id}) {self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name}"
 
 class MealSlotTime(models.Model):
     slot_name = models.CharField(_("Slot Name"), max_length=50)
@@ -45,7 +43,7 @@ class Table(models.Model):
         verbose_name_plural = _("Tables List")
 
 class Reservation(models.Model):
-    user_id = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    user_id = models.ForeignKey(UserProfile, verbose_name=_("User"), on_delete=models.CASCADE)
     table_id = models.ForeignKey(Table, verbose_name=_("Table"), on_delete=models.CASCADE)
     reservation_date = models.DateTimeField(_("Reservation Date"))
     payment_status = models.BooleanField(_("Payment Status"), default=False)
@@ -122,15 +120,12 @@ class PaymentStaus(models.TextChoices):
     FAILED = 'F', _('Failed')
 
 class Payment(models.Model):
-    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, verbose_name=_("User"), on_delete=models.CASCADE)
     reservation_id = models.ForeignKey(Reservation, verbose_name=_("Reservation"), on_delete=models.CASCADE)
     description = models.CharField(_("Description"), max_length=50)
     table_id = models.ForeignKey(Table, verbose_name=_("Table"), on_delete=models.CASCADE)
-    stripe_payment_id = models.CharField(_("Stripe Payment ID"),max_length=100)
+    payment_method_id = models.CharField(_("Stripe Payment ID"),max_length=100)
     amount = models.IntegerField(_("Amount"))
     payment_date = models.DateField(_("Payment Date"), auto_now_add=True)
     customer_id = models.CharField(_("Customer ID"),max_length=100, null=True, blank=True)
     status = models.CharField(_("Status"), max_length=2, choices=PaymentStaus.choices, default=PaymentStaus.PENDING)
-
-    def __str__(self) -> str:
-        return _("Payment for {user} on {date} is {status}").format(user=self.user, date=self.payment_date, status=self.get_status_display())

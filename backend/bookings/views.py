@@ -1,13 +1,21 @@
 from django.shortcuts import render
 from django.db.models import F, Value, IntegerField
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 from django.db.models.functions import Greatest
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
+import stripe
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from datetime import datetime
 from django.core.serializers import serialize
 from django.http import JsonResponse
 import calendar
+from django.conf import settings
+
+# Set the Stripe API key
+stripe.api_key = settings.STRIPE_SECRET_KEY
 from calendarapp.models import Event
 import pdb
 from .models import MealSlotTime, Table, UserProfile, Reservation, Payment
@@ -127,4 +135,23 @@ class PaymentView(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
 
-
+@csrf_exempt
+def process_stripe_payment(request, payment_id):
+    pdb.set_trace()
+    if request.method == 'POST':
+        payment = get_object_or_404(Payment, id=payment_id)
+        try:
+            # Create a PaymentIntent
+            intent = stripe.PaymentIntent.create(
+                amount=payment.amount*100,
+                currency='eur',
+                customer=payment.customer_id,
+                payment_method=payment.payment_method_id,
+                off_session=True,
+                confirm=True
+            )
+            return JsonResponse({'success': True, 'paymentIntentId': intent.id})
+        except stripe.error.StripeError as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)

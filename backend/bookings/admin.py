@@ -5,6 +5,9 @@ from django.http import HttpRequest
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 import stripe
+import pdb
+from django.urls import reverse
+from django.middleware.csrf import get_token
 from django.conf import settings
 from .models import UserProfile, MealSlotTime, Table, Reservation, Payment
 
@@ -61,25 +64,58 @@ class ReservationAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'amount', 'description', 'payment_date', 'stripe_payment')
+    list_display = ('user', 'amount', 'description', 'payment_date', 'payment_method_id', 'customer_id', 'get_stripe_payment_button')
     list_filter = ['payment_date']
 
-    # Custom method to link to Stripe Payment
-    def stripe_payment(self, obj):
-        if obj.stripe_payment_id:
-            return format_html(f'<a href="https://dashboard.stripe.com/test/customer/{obj.customer_id}" target="_blank">View Payment</a>')
-        return format_html(f'<a class="button" href="/admin/make_payment/{obj.id}/">Make Payment</a>')
+    def get_queryset(self, request):
+        self.request = request  # Make request available in other methods
+        return super().get_queryset(request)
+    
+    def get_stripe_payment_button(self, obj):
+        if obj.payment_method_id:
+            payment_url = reverse('process_stripe_payment', args=[obj.id])
+            csrf_token = get_token(self.request)  # Access `self.request` to get CSRF token
+            return format_html(
+                '''
+                <form id="charge-form-{obj_id}" style="display:inline;">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{}">
+                    <button type="submit" class="button" onclick="submitChargeForm(event, '{}');">Charge Customer</button>
+                </form>
+                <script>
+                    function submitChargeForm(event, url) {{
+                        event.preventDefault(); // Prevent form submission and page reload
+                        const form = document.getElementById('charge-form-{obj_id}');
+                        const formData = new FormData(form);
 
-    stripe_payment.short_description = 'Stripe Payment'
+                        fetch(url, {{
+                            method: 'POST',
+                            body: formData,
+                        }})
+                        .then(response => response.json())
+                        .then(data => {{
+                            if (data.success) {{
+                                alert('Payment successful! Payment ID: ' + data.paymentIntentId);
+                            }} else {{
+                                alert('Payment failed: ' + data.error);
+                            }}
+                        }})
+                        .catch(error => {{
+                            console.error('Error:', error);
+                            alert('An error occurred while processing the payment.');
+                        }});
+                    }}
+                </script>
+                ''', 
+                csrf_token, payment_url, obj_id=obj.id
+            )
+        return format_html('<a class="button" href="/admin/make_payment/{}/">Make Payment</a>', obj.id)
 
-    def get_urls(self):
-        from django.urls import path
-        urls = super().get_urls()
-        custom_urls = [
-            path('make_payment/<int:payment_id>/', self.admin_site.admin_view(self.make_payment), name='make_payment'),
-        ]
-        return custom_urls + urls
+    get_stripe_payment_button.short_description = 'Stripe Payment'
 
+    # Capture the request object using a custom method and set it on the instance
+    def changelist_view(self, request, extra_context=None):
+        self.request = request  # Set request on the instance
+        return super().changelist_view(request, extra_context)
     def make_payment(self, request, payment_id):
         payment = Payment.objects.get(id=payment_id)
         try:
