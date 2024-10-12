@@ -145,7 +145,7 @@
         var year = today.getFullYear();
 
         // Fetch user profile data
-        fetch('http://127.0.0.1:8000/bookings/user_profile/')
+        fetch('http://0.0.0.0:8000/bookings/user_profile/')
             .then(response => response.json())
             .then(data => {
                 const firstProfile = data[0];
