@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { AppleIcon, CreditCard } from "lucide-react";
+import { AppleIcon, CreditCard, Loader2 } from "lucide-react";
 
 const CARD_ELEMENT_OPTIONS = {
   style: {
@@ -22,7 +22,12 @@ const CARD_ELEMENT_OPTIONS = {
   hidePostalCode: true,
 };
 
-export default function CheckoutForm({ onSuccess,clientSecret,customerId ,customerDetails}) {
+export default function CheckoutForm({
+  onSuccess,
+  clientSecret,
+  customerId,
+  customerDetails,
+}) {
   const stripe = useStripe();
   const elements = useElements();
   const [email, setEmail] = useState(customerDetails?.email);
@@ -68,15 +73,6 @@ export default function CheckoutForm({ onSuccess,clientSecret,customerId ,custom
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
-      {/* <button className="w-full bg-gray-500 text-white hover:bg-gray-800 mb-4 flex justify-center items-center p-2 rounded-md">
-        <AppleIcon className="mr-2 h-4 w-4 text-white" />
-        Pay
-      </button>
-
-      <div className="text-center text-sm text-gray-500 mb-4">
-        Or pay with card
-      </div> */}
-
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <label
@@ -124,31 +120,10 @@ export default function CheckoutForm({ onSuccess,clientSecret,customerId ,custom
             onChange={(e) => setCardholderName(e.target.value)}
           />
         </div>
-{/* 
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            id="save-info"
-            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-            checked={saveInfo}
-            onChange={(e) => setSaveInfo(e.target.checked)}
-          />
-          <label
-            htmlFor="save-info"
-            className="text-sm font-medium text-gray-700"
-          >
-            Save my info for 1-click checkout with Link
-          </label>
-        </div> */}
 
         <p className="text-xs text-gray-500">
           Securely pay on Powdur and everywhere Link is accepted.
         </p>
-
-        {/* <div className="flex items-center space-x-2 text-sm text-gray-500">
-          <CreditCard className="h-4 w-4" />
-          <span>(800) 555-0175</span>
-        </div> */}
 
         {errorMessage && (
           <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
@@ -156,10 +131,17 @@ export default function CheckoutForm({ onSuccess,clientSecret,customerId ,custom
 
         <button
           type="submit"
-          className="w-full bg-gray-500 text-white hover:bg-indigo-700 p-2 rounded-md"
+          className="w-full bg-gray-500 text-white hover:bg-indigo-700 p-2 rounded-md font-medium transition duration-150 ease-in-out flex justify-center items-center"
           disabled={!stripe || isLoading}
         >
-          {isLoading ? "Processing..." : "Pay"}
+          {isLoading ? (
+            <>
+              <Loader2 className="animate-spin mr-2 h-5 w-5" />
+              Processing...
+            </>
+          ) : (
+            <>Pay Securely</>
+          )}
         </button>
       </form>
 
