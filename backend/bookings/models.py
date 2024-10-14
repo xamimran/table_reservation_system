@@ -61,9 +61,19 @@ class Reservation(models.Model):
     # Check if required fields are set
         if not self.reservation_date or not self.slot_time_id or not self.table_id:
             raise ValidationError(_("Reservation date, slot time, and table must be specified."))
-
+    
         reservation_date = self.reservation_date.date()
-
+    
+        # If updating an existing reservation, check if reservation details changed
+        if self.pk:
+            existing_reservation = Reservation.objects.get(pk=self.pk)
+            
+            # Skip availability checks if reservation details are unchanged
+            if (existing_reservation.reservation_date == self.reservation_date and
+                existing_reservation.table_id == self.table_id and
+                existing_reservation.slot_time_id == self.slot_time_id):
+                return
+    
         # Check for event conflicts
         events = Event.objects.filter(
             start_time__date__lte=reservation_date,
@@ -73,26 +83,26 @@ class Reservation(models.Model):
         )
         if events.exists():
             raise ValidationError(_("Cannot reserve a table on {date} because there is an event scheduled.").format(date=self.reservation_date))
-
+    
         # Check for table availability by excluding any tables that are already reserved
         reserved_tables = Reservation.objects.filter(
             reservation_date__date=reservation_date,
             slot_time_id=self.slot_time_id
         ).values_list('table_id', flat=True)
-
+    
         # Ensure the specified table is not in the reserved list
         if self.table_id.id in reserved_tables:
             raise ValidationError(_("Table {table_number} is already reserved on {date} for the selected time slot. Select another date or time slot").format(
                 table_number=self.table_id.table_number, date=self.reservation_date
             ))
-
+    
         # Ensure there is at least one available table for the given requirements
         available_table_exists = Table.objects.filter(
             id=self.table_id.id,  # Check only the specific table
             adults__gte=self.table_id.adults,
             children__gte=self.table_id.children
         ).exclude(id__in=reserved_tables).exists()
-
+    
         if not available_table_exists:
             raise ValidationError(_("No available tables found for the given criteria on {date}.").format(date=self.reservation_date))
 
