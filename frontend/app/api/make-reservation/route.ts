@@ -79,13 +79,12 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
-
-    // Step 3: Create a Stripe Checkout session
+    const totalAmount = (adults * 50) + (children * 30); // Modify 30 to the desired price per child    // Step 3: Create a Stripe Checkout session
     try {
       const paymentResponse = await axios.post(`${backendUrl}/payment/`, {
         description: `Payment for reservation ${reservationResponse.data.id}`,
         payment_method_id: "1234", // You might want to generate this dynamically
-        amount: 0, // We'll update this after creating the session
+        amount: totalAmount, // We'll update this after creating the session
         status: "P",
         user: userId,
         reservation_id: reservationResponse.data.id,
