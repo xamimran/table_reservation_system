@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { AppleIcon, CreditCard, Loader2 } from "lucide-react";
+import { useTranslations } from "@/app/hooks/useTranslations";
+import { PolicyModal } from "./PolicesModal";
 
 const CARD_ELEMENT_OPTIONS = {
   style: {
@@ -28,6 +30,7 @@ export default function CheckoutForm({
   customerId,
   customerDetails,
 }) {
+  const t = useTranslations();
   const stripe = useStripe();
   const elements = useElements();
   const [email, setEmail] = useState(customerDetails?.email);
@@ -79,12 +82,12 @@ export default function CheckoutForm({
             htmlFor="email"
             className="block text-sm font-medium text-gray-700"
           >
-            Email
+            {t("Email")}
           </label>
           <input
             id="email"
             type="email"
-            placeholder="Email"
+            placeholder={t("Email")}
             required
             className="block w-full p-2 border border-gray-300 rounded-md"
             value={email}
@@ -97,7 +100,7 @@ export default function CheckoutForm({
             htmlFor="card-element"
             className="block text-sm font-medium text-gray-700"
           >
-            Card information
+            {t("CardInfor")}
           </label>
           <div className="p-3 border border-gray-300 rounded-md">
             <CardElement id="card-element" options={CARD_ELEMENT_OPTIONS} />
@@ -109,11 +112,11 @@ export default function CheckoutForm({
             htmlFor="cardholderName"
             className="block text-sm font-medium text-gray-700"
           >
-            Cardholder name
+            {t("CardholderName")}
           </label>
           <input
             id="cardholderName"
-            placeholder="Full name on card"
+            placeholder={t("NamePlaceholder")}
             required
             className="block w-full p-2 border border-gray-300 rounded-md"
             value={cardholderName}
@@ -122,7 +125,8 @@ export default function CheckoutForm({
         </div>
 
         <p className="text-xs text-gray-500">
-          Securely pay on Powdur and everywhere Link is accepted.
+          {t("SecureText")}
+          <PolicyModal />
         </p>
 
         {errorMessage && (
@@ -137,18 +141,15 @@ export default function CheckoutForm({
           {isLoading ? (
             <>
               <Loader2 className="animate-spin mr-2 h-5 w-5" />
-              Processing...
+              {t("Processing")}...
             </>
           ) : (
-            <>Pay Securely</>
+            <>{t("PaySecurely")}</>
           )}
         </button>
       </form>
 
-      <p className="mt-4 text-xs text-gray-500">
-        Your payment information is securely processed by Stripe. We do not
-        store your card details.
-      </p>
+      <p className="mt-4 text-xs text-gray-500">{t("PaymentInfo")}</p>
     </div>
   );
 }
