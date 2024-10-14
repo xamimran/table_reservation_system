@@ -31,15 +31,6 @@ export default function DateStep({
   const t = useTranslations();
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const bookedSlots = [
-    { date: new Date(2024, 9, 10), time: "12:00 PM" },
-    { date: new Date(2024, 9, 15), time: "7:00 PM" },
-    { date: new Date(2024, 9, 18), time: "1:00 PM" },
-    { date: new Date(2024, 9, 22), time: "6:30 PM" },
-    { date: new Date(2024, 9, 25), time: "8:00 PM" },
-    { date: new Date(2024, 8, 25), time: "8:00 PM" },
-  ];
-
   const nextMonth = (e: React.MouseEvent) => {
     e.preventDefault();
     setCurrentDate(addMonths(currentDate, 1));
@@ -63,10 +54,7 @@ export default function DateStep({
 
   const handleDateClick = (e: React.MouseEvent, date: Date) => {
     e.preventDefault();
-    if (
-      !isBefore(date, startOfDay(new Date())) ||
-      bookedSlots.some((slot) => isSameDay(date, slot.date))
-    ) {
+    if (!isBefore(date, startOfDay(new Date()))) {
       onDateSelect(date);
     }
   };
@@ -99,7 +87,15 @@ export default function DateStep({
           </Button>
         </div>
         <div className="grid grid-cols-7 gap-1 sm:gap-2">
-          {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day) => (
+          {[
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+          ].map((day) => (
             <div
               key={day}
               className="text-center font-medium text-gray-500 text-xs sm:text-sm"
@@ -108,13 +104,9 @@ export default function DateStep({
             </div>
           ))}
           {dates.map((date, i) => {
-            const isBooked = bookedSlots.some((slot) =>
-              isSameDay(date, slot.date)
-            );
             const isSelected = selectedDate && isSameDay(date, selectedDate);
             const isPast = isBefore(date, startOfDay(new Date()));
             const isCurrentMonth = isSameMonth(date, currentDate);
-
             return (
               <Button
                 key={i}
@@ -123,12 +115,11 @@ export default function DateStep({
                   "h-12 sm:h-20 font-normal flex flex-col items-center justify-start p-1",
                   isSelected && "bg-yellow-100 text-[#eab24f] font-semibold",
                   isPast &&
-                    !isBooked &&
                     "bg-gray-100 text-gray-400 cursor-not-allowed hover:bg-gray-100",
                   !isCurrentMonth && "text-gray-500"
                 )}
                 onClick={(e) => handleDateClick(e, date)}
-                disabled={isPast && !isBooked}
+                disabled={isPast}
                 type="button"
               >
                 <span className="text-xs sm:text-sm">
