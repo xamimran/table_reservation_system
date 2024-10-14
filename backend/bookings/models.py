@@ -63,15 +63,21 @@ class Reservation(models.Model):
             raise ValidationError(_("Cannot reserve a table on {date} because there is an event scheduled.").format(date=self.reservation_date))
 
     def save(self, *args, **kwargs):
-        self.clean()
+        # Check if payment status has changed
+        if self.pk:
+            # Existing reservation, check if payment_status was changed to True
+            old_reservation = Reservation.objects.get(pk=self.pk)
+            if not old_reservation.payment_status and self.payment_status:
+                # Payment status changed to True, send the confirmation email
+                self.send_reservation_email()
+        
+        # Save the reservation as usual
         super().save(*args, **kwargs)
 
-@receiver(post_save, sender=Reservation)
-def send_reservation_email(sender, instance, created, **kwargs):
-    if created:
-        user = instance.user_id
-        table = instance.table_id
-        meal_slot = instance.slot_time_id
+    def send_reservation_email(self):
+        user = self.user_id
+        table = self.table_id
+        meal_slot = self.slot_time_id
 
         subject = _('Your Reservation Confirmation at Fine Table')
         message = _("""
@@ -95,7 +101,7 @@ def send_reservation_email(sender, instance, created, **kwargs):
         """).format(
             name=f"{user.first_name} {user.last_name}",
             phone=user.phone,
-            date=instance.reservation_date,
+            date=self.reservation_date,
             meal_type=meal_slot.slot_name,
             meal_start=meal_slot.start_time.strftime('%I:%M %p'),
             meal_end=meal_slot.end_time.strftime('%I:%M %p'),

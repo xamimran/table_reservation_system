@@ -95,9 +95,8 @@ class TableView(viewsets.ModelViewSet):
         except ValueError:
             return Response({"message": "Invalid date format. Use 'dd-mm-yy'."}, status=400)
 
-        # Check if there is any event on the reservation date
-        if Event.objects.filter(start_time__date=reservation_date, is_active=True, is_deleted=False).exists():
-            return Response({"message": "No reservations can be made on this date due to resturant unavailability."}, status=400)
+        if Event.objects.filter(start_time__date__lte=reservation_date,end_time__date__gte=reservation_date,is_active=True,is_deleted=False).exists():
+            return Response({"message": "No reservations can be made on this date due to restaurant unavailability."}, status=400)
 
         # Proceed with the existing logic to check for table availability
         reserved_tables = Reservation.objects.filter(
