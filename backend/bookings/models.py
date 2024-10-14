@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from calendarapp.models import Event
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
+import pdb
 
 class UserProfile(models.Model):
     email = models.EmailField(max_length=255, unique=False, null=True, blank=True)
@@ -85,10 +86,7 @@ class Reservation(models.Model):
             raise ValidationError(_("Cannot reserve a table on {date} because there is an event scheduled.").format(date=self.reservation_date))
     
         # Check for table availability by excluding any tables that are already reserved
-        reserved_tables = Reservation.objects.filter(
-            reservation_date__date=reservation_date,
-            slot_time_id=self.slot_time_id
-        ).values_list('table_id', flat=True)
+        reserved_tables = Reservation.objects.filter(reservation_date__date=reservation_date,slot_time_id=self.slot_time_id).values_list('table_id', flat=True)
     
         # Ensure the specified table is not in the reserved list
         if self.table_id.id in reserved_tables:
