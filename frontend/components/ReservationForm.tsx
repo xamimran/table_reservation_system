@@ -14,6 +14,7 @@ import DefaultLoader from "./DefaultLoader";
 import Image from "next/image";
 import { useTranslations } from "@/app/hooks/useTranslations";
 import CheckoutForm from "./Stripe/CheckoutForm";
+import { useRouter } from 'next/navigation';
 
 const steps = [
   { title: "mealType", icon: "/meal-type.png", component: MealTypeStep },
@@ -22,12 +23,13 @@ const steps = [
   { title: "details", icon: "/details.png", component: CustomerDetailsStep },
 ];
 export default function ReservationForm() {
+  const router = useRouter();
   const t = useTranslations();
   const [currentStep, setCurrentStep] = useState(0);
   const [mealType, setMealType] = useState<any>(null);
   const [adults, setAdults] = useState<string>("2");
   const [children, setChildren] = useState<string>("0");
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [isTableAvailable, setIsTableAvailable] = useState(false);
   const [tableData, setTableData] = useState();
   const [customerDetails, setCustomerDetails] = useState({
@@ -71,11 +73,13 @@ export default function ReservationForm() {
     if (currentStep === steps.length - 1) {
       setIsLoading(true);
       try {
+        const formattedDatee = selectedDate && selectedDate.toLocaleDateString('en-CA'); 
+
         const response = await axios.post("/api/make-reservation", {
           mealType,
           adults,
           children,
-          date,
+          date:formattedDatee,
           customerDetails,
           tableData,
         });
@@ -101,13 +105,14 @@ export default function ReservationForm() {
 
   const handleAvailability = async () => {
     try {
+      const formattedDatee = selectedDate && selectedDate.toLocaleDateString('en-CA'); 
       const response = await axios.post("/api/get-table", {
-        selectedDate: date,
+        selectedDate: formattedDatee,
         mealType: mealType,
         adults: adults,
         children: children,
       });
-      const newdate = date ? new Date(date) : new Date();
+      const newdate = selectedDate ? new Date(selectedDate) : new Date();
       const formattedDate = newdate.toLocaleDateString("en-US", {
         weekday: "long",
         year: "numeric",
@@ -160,11 +165,11 @@ export default function ReservationForm() {
       case 2:
         return (
           <DateStep
-            selectedDate={date}
+            selectedDate={selectedDate}
             onDateSelect={(date) => {
               setIsTableAvailable(false);
               setAvailabilityChecked(false);
-              setDate(date);
+              setSelectedDate(date);
             }}
           />
         );
@@ -185,7 +190,6 @@ export default function ReservationForm() {
   ) => {
 
     try {
-      // Call the get-session API
       const response = await fetch(
         `/api/get-session?payment_method_id=${paymentMethodId}&customer_id=${customerId}&payment_id=${paymentId}&user_id=${userId}&reservation_id=${reservationId}`,
         {
@@ -207,9 +211,8 @@ export default function ReservationForm() {
         console.log("Failed to save card");
         // You can add any additional client-side logic here for failed card save
       }
-
       // Redirect to the appropriate page
-      window.location.href = data.applicationLink;
+      router.push(data.applicationLink);
     } catch (error) {
       console.error("Error saving card:", error);
       // Handle the error (e.g., show an error message to the user)
