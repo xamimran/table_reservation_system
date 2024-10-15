@@ -27,13 +27,15 @@ export default function PartySizeStep({
   const t = useTranslations();
   const maxChildren = parseInt(adults) - 1;
   const childrenOptions = Array.from(
-    { length: maxChildren >= 0 ? maxChildren + 1 : 1 },
+    { length: maxChildren >= 0 ? 6 : 1 },
     (_, i) => i
   );
 
   return (
     <div className="space-y-4 sm:space-y-6 h-full sm:h-[400px]">
-      <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">{t("partySize")}</h2>
+      <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
+        {t("partySize")}
+      </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <div className="space-y-2">
           <Label
@@ -62,7 +64,7 @@ export default function PartySizeStep({
               <SelectValue placeholder={t("selectNumberOfAdults")} />
             </SelectTrigger>
             <SelectContent>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                 <SelectItem
                   key={num}
                   value={num.toString()}
@@ -115,9 +117,7 @@ export default function PartySizeStep({
           width="28"
           height="28"
         />
-        <span>
-          {t("partySizeMessage", { adults, children })}
-        </span>
+        <span>{t("partySizeMessage", { adults, children })}</span>
       </p>
     </div>
   );
