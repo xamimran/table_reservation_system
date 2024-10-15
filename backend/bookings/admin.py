@@ -37,7 +37,7 @@ class TableAdmin(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ['get_table_number', 'user_id', 'reservation_date', 'get_meal_type', 'display_no_show']
+    list_display = ['get_table_number', 'user_id', 'get_reservation_date', 'get_meal_type', 'display_no_show']
     list_filter = ['reservation_date', 'no_show']
 
     def display_no_show(self, obj):
@@ -47,6 +47,8 @@ class ReservationAdmin(admin.ModelAdmin):
     
     def get_table_number(self, obj):
         return obj.table_id.table_number
+    def get_reservation_date(self, obj):
+        return obj.reservation_date.date()
 
     get_table_number.short_description = _('Table Number')
 
