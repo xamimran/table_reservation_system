@@ -101,7 +101,8 @@ class TableView(viewsets.ModelViewSet):
         reserved_tables = Reservation.objects.filter(    reservation_date__date=reservation_date,    slot_time_id=slot_time_id).values_list('table_id', flat=True)
         available_table = Table.objects.filter(
             adults__gte=adults,
-            children__gte=children
+            children__gte=children,
+            is_available = True
         ).exclude(id__in=reserved_tables).annotate(
             adult_surplus=F('adults') - Value(adults, output_field=IntegerField()),
             child_surplus=F('children') - Value(children, output_field=IntegerField()),
