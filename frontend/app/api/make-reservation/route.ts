@@ -79,7 +79,7 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
-    const totalAmount = (adults * 50) + (children * 30); // Modify 30 to the desired price per child    // Step 3: Create a Stripe Checkout session
+    const totalAmount = (adults * 50) + (children * 50); // Modify 30 to the desired price per child    // Step 3: Create a Stripe Checkout session
     try {
       const paymentResponse = await axios.post(`${backendUrl}/payment/`, {
         description: `Payment for reservation ${reservationResponse.data.id}`,
