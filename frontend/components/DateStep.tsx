@@ -58,7 +58,8 @@ export default function DateStep({
       onDateSelect(date);
     }
   };
-
+  const month = format(currentDate, "MMMM");
+  const year = format(currentDate, "yyyy");
   return (
     <div className="space-y-4">
       <h2 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">
@@ -75,7 +76,9 @@ export default function DateStep({
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <h2 className="text-base sm:text-lg font-semibold">
-            {format(currentDate, "MMMM yyyy")}
+            <p>
+              {t(`${month}`)} {year}
+            </p>
           </h2>
           <Button
             variant="outline"
