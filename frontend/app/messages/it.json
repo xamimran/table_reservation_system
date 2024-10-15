@@ -76,5 +76,17 @@
   "error": "Errore",
   "payment_issue": "C'è stato un problema nell'elaborazione del pagamento.",
   "session_id": "ID Sessione",
-  "contact_support_failure": "Se hai bisogno di assistenza o desideri riprovare, contatta il nostro team di supporto."
+  "contact_support_failure": "Se hai bisogno di assistenza o desideri riprovare, contatta il nostro team di supporto.",
+  "January": "Gennaio",
+  "February": "Febbraio",
+  "March": "Marzo",
+  "April": "Aprile",
+  "May": "Maggio",
+  "June": "Giugno",
+  "July": "Luglio",
+  "August": "Agosto",
+  "September": "Settembre",
+  "October": "Ottobre",
+  "November": "Novembre",
+  "December": "Dicembre"
 }
