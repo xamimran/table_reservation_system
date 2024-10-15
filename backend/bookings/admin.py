@@ -75,23 +75,19 @@ class PaymentAdmin(admin.ModelAdmin):
     
     def get_stripe_payment_button(self, obj):
         if obj.payment_method_id:
-            payment_url = reverse('process_stripe_payment', args=[obj.id])
-            csrf_token = get_token(self.request)  # Access `self.request` to get CSRF token
+            payment_url = reverse('process_stripe_payment', args=[obj.id])  # Passes payment_id in the URL
+            csrf_token = get_token(self.request)  # Get CSRF token for secure POST request
             return format_html(
                 '''
-                <form id="charge-form-{obj_id}" style="display:inline;">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{}">
-                    <button type="submit" class="button" onclick="submitChargeForm(event, '{}');">Charge Customer</button>
-                </form>
+                <button type="button" class="button" onclick="submitChargeForm('{}', '{}');">Charge Customer</button>
                 <script>
-                    function submitChargeForm(event, url) {{
-                        event.preventDefault(); // Prevent form submission and page reload
-                        const form = document.getElementById('charge-form-{obj_id}');
-                        const formData = new FormData(form);
-
-                        fetch(url, {{
+                    function submitChargeForm(paymentUrl, csrfToken) {{
+                        fetch(paymentUrl, {{
                             method: 'POST',
-                            body: formData,
+                            headers: {{
+                                'X-CSRFToken': csrfToken,
+                                'Content-Type': 'application/json'
+                            }},
                         }})
                         .then(response => response.json())
                         .then(data => {{
@@ -107,8 +103,8 @@ class PaymentAdmin(admin.ModelAdmin):
                         }});
                     }}
                 </script>
-                ''', 
-                csrf_token, payment_url, obj_id=obj.id
+                ''',
+                payment_url, csrf_token
             )
         return format_html('<a class="button" href="/admin/make_payment/{}/">Make Payment</a>', obj.id)
 
