@@ -98,7 +98,7 @@ class Reservation(models.Model):
         available_table_exists = Table.objects.filter(
             id=self.table_id.id,  # Check only the specific table
             adults__gte=self.table_id.adults,
-            children__gte=self.table_id.children
+            children__gte=self.table_id.children,
             is_available = True
         ).exclude(id__in=reserved_tables).exists()
     
