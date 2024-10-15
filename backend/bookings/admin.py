@@ -1,4 +1,5 @@
 from typing import Any
+from django.utils import timezone
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.http import HttpRequest
@@ -48,7 +49,7 @@ class ReservationAdmin(admin.ModelAdmin):
     def get_table_number(self, obj):
         return obj.table_id.table_number
     def get_reservation_date(self, obj):
-        return obj.reservation_date.date()
+        return timezone.localtime(obj.reservation_date).date()
 
     get_table_number.short_description = _('Table Number')
 
