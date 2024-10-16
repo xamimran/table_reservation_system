@@ -109,7 +109,7 @@ class PaymentAdmin(admin.ModelAdmin):
             )
         return format_html('<a class="button" href="/admin/make_payment/{}/">Make Payment</a>', obj.id)
 
-    get_stripe_payment_button.short_description = 'Stripe Payment'
+    get_stripe_payment_button.short_description = _('Pagamento a strisce')
 
     # Capture the request object using a custom method and set it on the instance
     def changelist_view(self, request, extra_context=None):

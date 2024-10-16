@@ -19,6 +19,10 @@ class UserProfile(models.Model):
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
 
+    class Meta:
+        verbose_name = _("User Profile")
+        verbose_name_plural = _("Profili utente")
+
 class MealSlotTime(models.Model):
     slot_name = models.CharField(_("Slot Name"), max_length=50)
     start_time = models.TimeField(_("Start Time"))
@@ -28,7 +32,7 @@ class MealSlotTime(models.Model):
     
     class Meta:
         verbose_name = _("Meal Slot Time")
-        verbose_name_plural = _("Meals Time")
+        verbose_name_plural = _("Orario dei pasti")
 
 class Table(models.Model):
     table_number = models.IntegerField(_("Table Number"), unique=True)
@@ -41,7 +45,7 @@ class Table(models.Model):
 
     class Meta:
         verbose_name = _("Table")
-        verbose_name_plural = _("Tables List")
+        verbose_name_plural = _("Elenco tabelle")
 
 class Reservation(models.Model):
     user_id = models.ForeignKey(UserProfile, verbose_name=_("User"), on_delete=models.CASCADE)
@@ -49,10 +53,10 @@ class Reservation(models.Model):
     reservation_date = models.DateTimeField(_("Reservation Date"))
     payment_status = models.BooleanField(_("Payment Status"), default=False)
     slot_time_id = models.ForeignKey(MealSlotTime, verbose_name=_("Meal Slot"), on_delete=models.CASCADE, default=0)
-    no_show = models.BooleanField(_('No Show'), default=False)
+    no_show = models.BooleanField(_('Nessuno spettacolo'), default=False)
 
     def __str__(self) -> str:
-        return _("Reservation for {user} on {date}").format(user=self.user_id, date=self.reservation_date)
+        return ""
 
     class Meta:
         verbose_name = _("Reservation")
@@ -173,8 +177,15 @@ class Payment(models.Model):
     reservation_id = models.ForeignKey(Reservation, verbose_name=_("Reservation"), on_delete=models.CASCADE)
     description = models.CharField(_("Description"), max_length=50)
     table_id = models.ForeignKey(Table, verbose_name=_("Table"), on_delete=models.CASCADE)
-    payment_method_id = models.CharField(_("Stripe Payment ID"),max_length=100)
+    payment_method_id = models.CharField(_("ID pagamento Stripe"),max_length=100)
     amount = models.IntegerField(_("Amount"))
     payment_date = models.DateField(_("Payment Date"), auto_now_add=True)
-    customer_id = models.CharField(_("Customer ID"),max_length=100, null=True, blank=True)
+    customer_id = models.CharField(_("ID cliente"),max_length=100, null=True, blank=True)
     status = models.CharField(_("Status"), max_length=2, choices=PaymentStaus.choices, default=PaymentStaus.PENDING)
+
+    class Meta:
+        verbose_name = _("Payment")
+        verbose_name_plural = _("Pagamento")
+
+    def __str__(self):
+        return ""
